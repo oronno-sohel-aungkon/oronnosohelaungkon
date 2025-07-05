@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" class="dark"> <!-- Default to dark mode -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oronno Sohel Aungkon - Biography</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for social icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Tone.js for sound effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+
+    <style>
+        /* Base styles for the entire page, matching the new design's dark background */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000; /* Solid black background */
+            color: #e2e8f0; /* Light text for dark background */
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+            margin: 0; /* Remove default body margin */
+            padding-left: 0; /* No horizontal padding on body, handled by inner containers */
+            padding-right: 0; /* No horizontal padding on body, handled by inner containers */
+        }
+
+        /* Dark mode styles - applied when 'dark' class is on html element */
+        html.dark body {
+            background-color: #1a202c; /* Slightly less black for dark mode body */
+            color: #e2e8f0; /* Light text */
+        }
+
+        /* Ensure text and border colors adapt for sections within the main content */
+        html.dark .text-gray-800 {
+            color: #e2e8f0; /* Lighter headings */
+        }
+
+        html.dark .text-gray-700 {
+            color: #cbd5e0; /* Lighter body text */
+        }
+
+        html.dark .border-gray-200 {
+            border-color: #4a5568; /* Darker border for sections */
+        }
+
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        html.dark ::-webkit-scrollbar-track {
+            background: #2d3748;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        html.dark ::-webkit-scrollbar-thumb {
+            background: #6b7280;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        html.dark ::-webkit-scrollbar-thumb:hover {
+            background: #4a5568;
+        }
+
+        /* Fixed navigation bar */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000; /* Ensure nav is on top of other content */
+            background-color: #000; /* Ensure nav background is black */
+        }
+
+        /* Nav link hover effect */
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #FFD700; /* Gold color on hover */
+        }
+
+        /* Mobile navigation menu */
+        @media (max-width: 768px) {
+            .navbar-social {
+                display: none; /* Hide social icons on small screens by default */
+            }
+            .navbar-toggle {
+                display: block; /* Show toggle button */
+            }
+            .navbar-menu:not(.hidden) { /* This targets the menu when 'hidden' class is removed by JS */
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 64px; /* Height of navbar */
+                left: 0;
+                width: 100%;
+                background-color: rgba(0, 0, 0, 0.9);
+                padding: 1rem 0;
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+                z-index: 990; /* Ensure menu is above other content but below modal */
+                height: calc(100vh - 64px); /* Make it take full height below the navbar */
+                overflow-y: auto; /* Enable scrolling if menu content is too long */
+            }
+            .navbar-menu:not(.hidden) a {
+                padding: 0.5rem 1rem;
+                text-align: center;
+            }
+        }
+
+        /* Styles for the custom modal */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+            justify-content: flex-start; /* Align to start (left) */
+            align-items: flex-start; /* Align to start (top) */
+            padding: 1rem; /* Add some padding around the modal */
+        }
+        .modal.flex { /* Only display flex when active */
+             display: flex;
+        }
+        .modal-content {
+            background-color: #1a1a1a;
+            padding: 1.5rem; /* Reduced padding for smaller size */
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3); /* shadow-xl */
+            width: 90%;
+            max-width: 300px; /* Smaller max-width */
+            text-align: left; /* Align text to left */
+            color: white;
+            position: relative;
+            top: 1rem;
+            left: 1rem;
+        }
+        .close-button {
+            position: absolute;
+            top: 0.5rem; /* Adjusted for smaller padding */
+            right: 0.5rem; /* Adjusted for smaller padding */
+            color: #aaa;
+            font-size: 1.2rem; /* Slightly smaller close button */
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="relative z-20 w-full bg-black text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <!-- Logo -->
+            <div class="flex items-center space-x-2">
+                <!-- SVG for Musico logo -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 16H8V8H10V16ZM14 16H12V8H14V16ZM18 16H16V8H18V16Z" fill="white"/>
+                </svg>
+                <!-- Changed text-xl to text-lg for smaller screens, and sm:text-xl for larger screens -->
+                <span class="font-semibold text-lg sm:text-xl tracking-tight">Oronno Sohel Aungkon</span>
+            </div>
+
+            <!-- Mobile Navigation Toggle -->
+            <div class="md:hidden">
+                <button id="nav-toggle" class="navbar-toggle flex items-center px-3 py-2 border rounded text-gray-200 border-gray-400 hover:text-white hover:border-white">
+                    <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
+                </button>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="hidden md:flex space-x-6 navbar-menu flex-grow justify-center" id="nav-content">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="biography.html" class="nav-link">About</a>
+                <a href="gallery.html" class="nav-link">Gallery</a>
+                <a href="bk.html" class="nav-link">Booking</a>
+                <a href="Video.html" class="nav-link">Video</a>
+            </div>
+
+            <!-- Social Icons -->
+            <div class="hidden md:flex space-x-4 navbar-social">
+                <a href="https://www.facebook.com/oronnosohelaungkon0" target="_blank" class="text-white hover:text-gray-400"><i class="fab fa-facebook-f"></i></a>
+                
+                <a href="https://www.instagram.com/oronnosohelaungkon/" target="_blank" class="text-white hover:text-gray-400"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area - Centered with max-width -->
+    <!-- Added pt-16 to the main content div to account for the fixed navbar height -->
+    <div class="max-w-4xl mx-auto transition-colors duration-300 pt-16">
+        <!-- Header Section - Background removed to blend with body -->
+        <header class="text-white p-6 md:p-8 text-center relative">
+            <!-- Back to Home Button -->
+            <button id="backButton" class="absolute top-4 left-4 p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 transition-all duration-300">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+            </button>
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-2 leading-tight">Biography</h1>
+            <p class="text-lg md:text-xl font-light opacity-90">Oronno Sohel Aungkon</p>
+        </header>
+
+        <main class="p-6 md:p-8 lg:p-10">
+            <!-- Early Life & Family Section -->
+            <section class="mb-8 pb-4 border-b border-gray-200 transition-colors duration-300">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4 transition-colors duration-300">Early Life & Family</h2>
+                <p class="text-gray-700 leading-relaxed transition-colors duration-300">
+                   Oronno was born on September 4, 2009, in Bandarban — a region celebrated for its natural beauty and cultural richness in Bangladesh. His father, Gazi Md. Sohel, and his mother, Salina Akter, both work in the same profession and are well-respected for their dedication. He has one elder sister, Samira Sohel Othoi, whose constant care and support have been a guiding light in his life. Growing up as the youngest in the family, Oronno was raised in a nurturing environment that encouraged creativity, curiosity, and learning. With an early passion for music, he made history by becoming the first kid bassist of Bangladesh, earning recognition for his unique talent and fearless entry into the country’s music scene.
+                </p>
+            </section>
+
+            <!-- Musical Journey Section -->
+            <section class="mb-8 pb-4 border-b border-gray-200 transition-colors duration-300">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4 transition-colors duration-300">Musical Journey</h2>
+                <p class="text-gray-700 leading-relaxed mb-4 transition-colors duration-300">
+                    Oronno’s musical journey began in 2017 when he first started playing guitar. By 2019, he became the vocalist and lead guitarist of the band Khola Chhad Unlimited, actively shaping the band’s early sound and identity. In 2020, his deepening interest in the bass guitar took hold — inspired by global legends like Cliff Burton, Flea, and John Myung, along with iconic Bangladeshi bands such as Warfaze, Aurthohin, and Artcell. He taught himself bass by ear, observation, and relentless practice.
+                </p>
+                <p class="text-gray-700 leading-relaxed mb-4 transition-colors duration-300">
+             In 2023, Oronno made his first national television appearance on Duronto TV with Khola Chhad Unlimited, becoming the youngest bassist ever to perform on such a platform in Bangladesh. By 2025, he officially joined the band as their bassist, marking a new chapter in their collective musical journey.
+                </p>
+                <p class="text-gray-700 leading-relaxed transition-colors duration-300">
+                    In 2024, Oronno released three solo albums, where he expressed his unique identity as a composer and instrumental storyteller — blending melody, intensity, and emotion into every note.
+                </p>
+            </section>
+
+            <!-- Creative Ventures Section -->
+            <section class="mb-8 pb-4 border-b border-gray-200 transition-colors duration-300">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4 transition-colors duration-300">Creative Ventures</h2>
+                <p class="text-gray-700 leading-relaxed mb-4 transition-colors duration-300">
+                    Oronno is not only a musician but also a tech-driven creative. He is the founder of:
+                </p>
+                <ul class="list-none space-y-3 text-gray-700 transition-colors duration-300">
+                    <li class="flex items-center">
+                        <span class="text-2xl mr-3">🎧</span>
+                        <p class="flex-1"><strong>O.S.A Studio</strong> – A creative space for musicians, artists, and animators from Bandarban</p>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-2xl mr-3">💻</span>
+                        <p class="flex-1"><strong>O.S.A. Technology</strong> – Focused on web apps and community platforms</p>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-2xl mr-3">🎬</span>
+                        <p class="flex-1"><strong>O.S.A. Animation</strong> – Exploring digital storytelling and cultural animation</p>
+                    </li>
+                </ul>
+                <p class="text-gray-700 leading-relaxed mt-6 mb-4 transition-colors duration-300">
+                    Some of his notable projects include:
+                </p>
+                <ul class="list-disc list-inside space-y-2 text-gray-700 pl-4 transition-colors duration-300">
+                    <li><strong class="text-blue-600">Osa Calendar</strong> – A colorful digital calendar app</li>
+                    <li><strong class="text-blue-600">Book-style Notes App</strong> – For writing, organizing, and designing creative ideas</li>
+                    <li><strong class="text-blue-600">Community Website for Bandarban</strong> – A one-stop portal for education, health, tourism, and more.</li>
+                </ul>
+            </section>
+
+            <!-- Personality & Beliefs Section -->
+            <section class="mb-8 pb-4 border-b border-gray-200 transition-colors duration-300">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4 transition-colors duration-300">Personality & Beliefs</h2>
+                <p class="text-gray-700 leading-relaxed transition-colors duration-300">
+                Oronno is known for his focused and clean lifestyle. He upholds strong values — avoiding smoking and drinking, respecting discipline, and embracing continuous learning. He believes that everything in life should be done with dedication, purpose, and honesty — whether it’s a song, a design, or a conversatio
+                </p>
+            </section>
+
+            <!-- Vision & Legacy Section -->
+            <section class="mb-4">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4 transition-colors duration-300">Vision & Legacy</h2>
+                <p class="text-gray-700 leading-relaxed mb-4 transition-colors duration-300">
+                    Oronno Sohel Aungkon represents the rising youth of Bangladesh — fearless, talented, and deeply rooted in community and creativity. With a vision to transform Bandarban into a hub of opportunity, he empowers young minds through music, technology, and collaborative innovation.
+                </p>
+                <p class="text-gray-700 leading-relaxed italic transition-colors duration-300">
+                    Though still in his teenage years, Oronno dreams of becoming one of the finest bassists in Bangladesh — not just through skill, but by inspiring others to follow their own creative paths. His journey is only beginning, and the road ahead is filled with endless possibilities, driven by passion, purpose, and unwavering dedication.
+                </p>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white p-8 mt-8">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+            <!-- Left Section: Logo and Description -->
+            <div class="flex flex-col items-center md:items-start">
+                <div class="flex items-center mb-4">
+                    <svg class="fill-current h-8 w-8 mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                    </svg>
+                    <span class="font-semibold text-2xl tracking-tight">Oronno</span>
+                </div>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Pioneer bassist from Bangladesh. Official member of Khola Chhad Unlimited. Passionate musician dedicated to performance, composition & creativity.
+                </p>
+            </div>
+
+            <!-- Middle Section: Quick Links -->
+            <div class="md:pl-12">
+                <h3 class="text-xl font-semibold mb-4">Quick Links</h3>
+                <ul class="space-y-2">
+                    <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors duration-200">Home</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">About</a></li>
+                    <li><a href="gallery.html" class="text-gray-400 hover:text-white transition-colors duration-200">Gallery</a></li>
+                    <li><a href="bk.html" class="text-gray-400 hover:text-white transition-colors duration-200">Booking</a></li>
+                    <li><a href="Video.html" class="text-gray-400 hover:text-white transition-colors duration-200">Video</a></li>
+                </ul>
+            </div>
+
+            <!-- Right Section: Connect -->
+            <div class="md:text-right">
+                <h3 class="text-xl font-semibold mb-4">Connect</h3>
+                <div class="flex justify-center md:justify-end space-x-4 mb-4">
+                    <a href="https://www.facebook.com/oronnosohelaungkon0" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-200">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+               
+                    <a href="https://www.instagram.com/oronnosohelaungkon/" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-200">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.youtube.com/@oronnosohelaungkon	" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-200">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+                <p class="text-gray-400 text-sm">
+                    Follow for the latest updates, new releases, and behind-the-scenes content.
+                </p>
+            </div>
+        </div>
+        <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-500 text-xs flex flex-col md:flex-row justify-between items-center">
+            <p>&copy; 2025 Oronno Sohel Aungkon. All rights reserved.</p>
+            <p class="mt-2 md:mt-0">Developed by <span class="text-red-500">&hearts;</span> by O.S.A. Technology</p>
+        </div>
+    </footer>
+
+    <!-- Custom Warning Modal -->
+    <div id="warningModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <i class="fas fa-exclamation-triangle text-yellow-400 text-3xl mb-2"></i> <!-- Warning Icon -->
+            <p class="text-xl font-bold mb-2">Access Denied!</p>
+            <p class="text-sm">You can't right-click on this page. Lol!</p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Tone.js synth for warning sound
+        const synth = new Tone.Synth().toDestination();
+
+        const htmlElement = document.documentElement;
+        const backButton = document.getElementById('backButton');
+        const navToggle = document.getElementById('nav-toggle');
+        const navContent = document.getElementById('nav-content');
+        const warningModal = document.getElementById('warningModal'); // Get the modal element
+
+        /**
+         * Displays the custom warning modal and plays a sound.
+         */
+        function showModal() {
+            warningModal.classList.remove('hidden');
+            warningModal.classList.add('flex'); // Use flex to center content
+            // Play a short sound
+            synth.triggerAttackRelease("C4", "8n"); // Plays a C4 note for an 8th note duration
+        }
+
+        /**
+         * Hides the custom warning modal.
+         */
+        function closeModal() {
+            warningModal.classList.add('hidden');
+            warningModal.classList.remove('flex');
+        }
+
+        // Ensure the page always loads in dark mode
+        document.addEventListener('DOMContentLoaded', () => {
+            htmlElement.classList.add('dark');
+            htmlElement.classList.remove('light');
+        });
+
+        // Add event listener for the back button
+        backButton.addEventListener('click', () => {
+            window.location.href = 'index.html'; // Navigate to index.html
+        });
+
+        // Toggle navigation for mobile
+        navToggle.addEventListener('click', function () {
+            navContent.classList.toggle('hidden');
+        });
+
+        // Disable right-click and show warning
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault(); // Prevent the default right-click menu
+            showModal(); // Show the custom warning modal
+        });
+
+        // Close modal if clicked outside content
+        window.addEventListener('click', function(event) {
+            if (event.target == warningModal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

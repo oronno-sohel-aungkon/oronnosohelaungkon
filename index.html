@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oronno Sohel Aungkon - Home</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for social icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Tone.js for sound effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000; /* Fallback background */
+        }
+        .hero-section {
+            /* This section now only contains the navbar and its background elements */
+            background-color: transparent; /* No background image here anymore */
+            position: relative;
+            min-height: auto; /* No longer needs full height */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            color: white;
+            /* Removed overflow: hidden; to prevent clipping of mobile menu */
+        }
+        /* Remove hero-overlay and shape styles from hero-section if they are only for the main banner */
+        .hero-overlay, .shape-left, .shape-right {
+            display: none; /* Hide these from the main hero section as they are now part of main-banner-with-text */
+        }
+
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #FFD700; /* Gold color on hover */
+        }
+        
+        @media (max-width: 768px) {
+            .navbar-menu {
+                display: none; /* Hide menu on small screens by default */
+            }
+            .navbar-social {
+                display: none; /* Hide social icons on small screens by default */
+            }
+            .navbar-toggle {
+                display: block; /* Show toggle button */
+            }
+            .navbar-menu.active {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 64px; /* Height of navbar */
+                left: 0;
+                width: 100%;
+                background-color: rgba(0, 0, 0, 0.9);
+                padding: 1rem 0;
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+                z-index: 50; /* Ensure menu is above other content but below modal */
+                height: calc(100vh - 64px); /* Make it take full height below the navbar */
+                overflow-y: auto; /* Enable scrolling if menu content is too long */
+            }
+            .navbar-menu.active a {
+                padding: 0.5rem 1rem;
+                text-align: center;
+            }
+            /* Adjust overview section for small screens */
+            .overview-content {
+                flex-direction: column;
+                align-items: center;
+            }
+            .overview-image {
+                margin-bottom: 2rem;
+            }
+        }
+
+        /* Styles for the custom modal */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+            /* Changed to flex for centering, but now adjusting for top-left */
+            display: flex;
+            justify-content: flex-start; /* Align to start (left) */
+            align-items: flex-start; /* Align to start (top) */
+            padding: 1rem; /* Add some padding around the modal */
+        }
+        .modal-content {
+            background-color: #1a1a1a;
+            /* Removed margin: auto; */
+            padding: 1.5rem; /* Reduced padding for smaller size */
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3); /* shadow-xl */
+            width: 90%;
+            max-width: 300px; /* Smaller max-width */
+            text-align: left; /* Align text to left */
+            color: white;
+            position: relative;
+            /* Added specific positioning for top-left */
+            top: 1rem;
+            left: 1rem;
+        }
+        .close-button {
+            position: absolute;
+            top: 0.5rem; /* Adjusted for smaller padding */
+            right: 0.5rem; /* Adjusted for smaller padding */
+            color: #aaa;
+            font-size: 1.2rem; /* Slightly smaller close button */
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        /* Style for scroll indicator */
+        .scroll-indicator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 3rem; /* Space between indicator and content */
+            color: #fff;
+            opacity: 0.7;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Main Banner Section with text overlay */
+        .main-banner-with-text {
+            position: relative;
+            width: 100%;
+            min-height: 100vh; /* Increased height to make it larger */
+            background-image: url('White Simple Script Musician Guitar YouTube Banner.png'); /* Original image URL */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .main-banner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.7) 100%); /* Dark overlay for text readability */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            z-index: 1; /* Ensure overlay is above background image but below text */
+        }
+        .main-banner-text {
+            position: relative;
+            z-index: 2; /* Ensure text is above the overlay */
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero-section">
+        <!-- Navbar -->
+        <nav class="relative z-20 w-full bg-transparent text-white p-4">
+            <div class="container mx-auto flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <!-- SVG for Musico logo -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 16H8V8H10V16ZM14 16H12V8H14V16ZM18 16H16V8H18V16Z" fill="white"/>
+                    </svg>
+                    <span class="text-2xl font-bold"><span class="text-lg font-normal">Oronno Sohel Aungkon</span></span>
+                </div>
+
+                <!-- Navigation Links (Hidden on small screens by default) -->
+                <div class="hidden md:flex space-x-6 navbar-menu flex-grow justify-center">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="biography.html" class="nav-link">About</a>
+                    <a href="gallery.html" class="nav-link">Gallery</a>
+                    <a href="bk.html" class="nav-link">Booking</a>
+                    <a href="Video.html" class="nav-link">Video</a>
+                </div>
+
+                <!-- Social Icons (Hidden on small screens by default) -->
+                <div class="hidden md:flex space-x-4 navbar-social">
+                    <a href="https://www.facebook.com/oronnosohelaungkon0" class="text-white hover:text-gray-400"><i class="fab fa-facebook-f"></i></a>
+                   
+                    <a href="https://www.instagram.com/oronnosohelaungkon/" class="text-white hover:text-gray-400"><i class="fab fa-instagram"></i></a>
+                </div>
+
+                <!-- Mobile menu toggle -->
+                <button class="md:hidden text-white focus:outline-none navbar-toggle" onclick="toggleMenu()">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Banner Section with Text Overlay -->
+    <section class="main-banner-with-text">
+        <div class="main-banner-overlay">
+            <div class="main-banner-text">
+                <p class="text-lg md:text-xl font-medium text-gray-300 mb-2">BANGLADESHI GUITARIST, BASSIST, COMPOSER & LYRICIST</p>
+                <h1 class="text-6xl md:text-8xl font-extrabold tracking-wide uppercase leading-tight">Oronno<br>Sohel<br>Aungkon</h1>
+                <p class="text-lg md:text-xl font-medium text-gray-300 mt-4 max-w-2xl">Blending raw power with melodic complexity, Oronno Sohel Aungkon crafts a sound that bridges the aggression of metal with the soul of instrumental storytelling. From thunderous basslines to emotionally charged compositions, his journey reflects a fearless commitment to redefining Bangladesh’s underground and progressive music scene — one note at a time.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="bg-black text-white py-16 px-4">
+        <div class="container mx-auto max-w-4xl">
+            <!-- Scroll Indicator -->
+            <div class="scroll-indicator mb-12">
+                <i class="fas fa-arrow-down text-3xl mb-2"></i>
+                <span class="text-sm uppercase tracking-wider">Scroll</span>
+            </div>
+
+            <!-- Overview - Redesigned with image and text side-by-side -->
+            <div class="mb-32 flex flex-col md:flex-row items-center md:items-start justify-center md:justify-between">
+                <!-- Image Column -->
+                <div class="md:w-1/2 flex justify-center mb-8 md:mb-0 overview-image">
+                    <img src="IMG-20250505-WA0084.jpg" alt="Oronno Sohel Aungkon" class="rounded-xl shadow-lg w-full max-w-sm">
+                </div>
+                <!-- Text Column -->
+                <div class="md:w-1/2 md:pl-8 text-center md:text-left overview-content">
+                    <h3 class="text-5xl md:text-6xl font-extrabold mb-4 text-white">Overview</h3>
+                    <hr class="w-24 border-b-4 border-red-600 mx-auto md:mx-0 mb-8">
+                    <p class="text-xl md:text-2xl leading-relaxed font-normal text-gray-300">
+                        Oronno Sohel Aungkon (born September 04, 2009) is a Bangladeshi bassist, composer, lyricist, and creative entrepreneur based in Bandarban. Known as the first kid bassist of Bangladesh, he is reshaping the country’s music and digital scene with his bold creativity and youthful energy.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Oronno Sponsor Section - Redesigned to match Overview style with images -->
+            <div class="mb-32 text-center md:text-left">
+                <h3 class="text-5xl md:text-6xl font-extrabold mb-4 text-white">Oronno Sponsor</h3>
+                <hr class="w-24 border-b-4 border-red-600 mx-auto md:mx-0 mb-8">
+                <div class="flex flex-col md:flex-row justify-around items-center space-y-8 md:space-y-0 md:space-x-8">
+                    <div class="flex flex-col items-center">
+                        <img src="Black White Modern Professional Youtube Channel Logo.png" alt="O.S.A. Studio Logo" class="rounded-full mb-2 object-cover w-24 h-24">
+                        <p class="text-lg font-medium text-gray-300">O.S.A. Studio</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <img src="Blue Green Modern Initial K Company Logo.png" alt="O.S.A. Technology Logo" class="rounded-full mb-2 object-cover w-24 h-24">
+                        <p class="text-lg font-medium text-gray-300">O.S.A. Technology</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <img src="OSA.png" alt="O.S.A. Animation Logo" class="rounded-full mb-2 object-cover w-24 h-24">
+                        <p class="text-lg font-medium text-gray-300">O.S.A. Animation</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="mb-32 text-center md:text-left">
+                <h3 class="text-5xl md:text-6xl font-extrabold mb-4 text-white">Contact</h3>
+                <hr class="w-24 border-b-4 border-red-600 mx-auto md:mx-0 mb-8">
+                <div class="text-xl md:text-2xl leading-relaxed font-normal text-gray-300">
+                    <p class="mb-2">Email: oronnosohelaungkon@gmail.com</p>
+                    <p class="mb-2">Phone: +880 123 456 7890</p>
+                    <p>Address: Bandarban, Chittagong Division, Bangladesh</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="bg-black text-white py-12 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-col md:flex-row justify-between items-center md:items-start space-y-8 md:space-y-0 md:space-x-8">
+                <!-- Signature/Logo and Description -->
+                <div class="flex flex-col items-center md:items-start text-center md:text-left md:w-1/3">
+                    <!-- Adjusted size for signature image using Tailwind classes -->
+                    <img src="IMG-20250505-WA0094.jpg" alt="Signature" class="mb-4 w-48 h-auto">
+                    <p class="text-gray-400 text-sm">Pioneer bassist from Bangladesh. Official member of Khola Chhad Unlimited. Passionate musician dedicated to performance, composition & creativity.</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="md:w-1/3 text-center md:text-left">
+                    <h4 class="text-xl font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-300 hover:text-white transition-colors duration-300">Home</a></li>
+                        <li><a href="biography.html" class="text-gray-300 hover:text-white transition-colors duration-300">About</a></li>
+                        <li><a href="gallery.html" class="text-gray-300 hover:text-white transition-colors duration-300">Gallery</a></li>
+                        <li><a href="biography.html" class="text-gray-300 hover:text-white transition-colors duration-300">Booking</a></li>
+                        <li><a href="Video.html" class="text-gray-300 hover:text-white transition-colors duration-300">Video</a></li>
+                    </ul>
+                </div>
+
+                <!-- Connect / Social Media -->
+                <div class="md:w-1/3 text-center md:text-right">
+                    <h4 class="text-xl font-semibold mb-4">Connect</h4>
+                    <div class="flex justify-center md:justify-end space-x-4 mb-4">
+                        <a href="https://www.facebook.com/oronnosohelaungkon0" class="text-gray-300 hover:text-white transition-colors duration-300 text-2xl"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/oronnosohelaungkon/" class="text-gray-300 hover:text-white transition-colors duration-300 text-2xl"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.youtube.com/@oronnosohelaungkon	" class="text-gray-300 hover:text-white transition-colors duration-300 text-2xl"><i class="fab fa-youtube"></i></a>
+                    </div>
+                    <p class="text-gray-400 text-sm">Follow for the latest updates, new releases, and behind-the-scenes content.</p>
+                </div>
+            </div>
+
+            <hr class="border-gray-700 my-8">
+
+            <!-- Copyright and Developed By -->
+            <div class="flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
+                <p>&copy; 2025 Oronno Sohel Aungkon. All rights reserved.</p>
+                <p>Developed by <span class="text-red-500">&hearts;</span> by O.S.A. Technology</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom Warning Modal -->
+    <div id="warningModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <i class="fas fa-exclamation-triangle text-yellow-400 text-3xl mb-2"></i> <!-- Warning Icon -->
+            <p class="text-xl font-bold mb-2">Access Denied!</p>
+            <p class="text-sm">You can't right-click on this page. Lol!</p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Tone.js synth for warning sound
+        const synth = new Tone.Synth().toDestination();
+
+        /**
+         * Toggles the visibility of the mobile navigation menu.
+         */
+        function toggleMenu() {
+            const menu = document.querySelector('.navbar-menu');
+            menu.classList.toggle('active');
+        }
+
+        // Get the modal element
+        const warningModal = document.getElementById('warningModal');
+
+        /**
+         * Displays the custom warning modal and plays a sound.
+         */
+        function showModal() {
+            warningModal.classList.remove('hidden');
+            warningModal.classList.add('flex'); // Use flex to center content
+            // Play a short sound
+            synth.triggerAttackRelease("C4", "8n"); // Plays a C4 note for an 8th note duration
+        }
+
+        /**
+         * Hides the custom warning modal.
+         */
+        function closeModal() {
+            warningModal.classList.add('hidden');
+            warningModal.classList.remove('flex');
+        }
+
+        // Disable right-click and show warning
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault(); // Prevent the default right-click menu
+            showModal(); // Show the custom warning modal
+        });
+
+        // Close modal if clicked outside content
+        window.addEventListener('click', function(event) {
+            if (event.target == warningModal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

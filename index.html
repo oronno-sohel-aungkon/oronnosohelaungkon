@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +8,7 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for social icons -->
+    <!-- Font Awesome for social icons and checkmarks -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Tone.js for sound effects -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
@@ -31,12 +32,34 @@
         .hero-overlay, .shape-left, .shape-right {
             display: none; /* Hide these from the main hero section as they are now part of main-banner-with-text */
         }
-
+        
+        /* New/Enhanced Navbar Styles */
+        .navbar {
+            transition: background-color 0.3s ease;
+        }
         .nav-link {
-            transition: color 0.3s ease;
+            transition: color 0.3s ease, border-bottom 0.3s ease;
+            position: relative;
+            padding-bottom: 5px;
+            color: #ccc; /* Slightly dimmer white */
         }
         .nav-link:hover {
-            color: #FFD700; /* Gold color on hover */
+            color: #FF0000; /* Bright Red on hover */
+        }
+        /* Link underline effect on hover */
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: #FF0000;
+            transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+            left: 0;
         }
         
         @media (max-width: 768px) {
@@ -53,10 +76,10 @@
                 display: flex;
                 flex-direction: column;
                 position: absolute;
-                top: 64px; /* Height of navbar */
+                top: 64px; /* Height of navbar (needs recalculation after padding change, but this is a good approximation) */
                 left: 0;
                 width: 100%;
-                background-color: rgba(0, 0, 0, 0.9);
+                background-color: rgba(0, 0, 0, 0.95);
                 padding: 1rem 0;
                 border-top: 1px solid rgba(255, 255, 255, 0.2);
                 z-index: 50; /* Ensure menu is above other content but below modal */
@@ -64,8 +87,10 @@
                 overflow-y: auto; /* Enable scrolling if menu content is too long */
             }
             .navbar-menu.active a {
-                padding: 0.5rem 1rem;
+                padding: 1rem 1rem; /* More padding for easier tapping */
                 text-align: center;
+                border-bottom: 1px solid #1a1a1a;
+                font-weight: 600;
             }
             /* Adjust overview section for small screens */
             .overview-content {
@@ -88,7 +113,6 @@
             height: 100%; /* Full height */
             overflow: auto; /* Enable scroll if needed */
             background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
-            /* Changed to flex for centering, but now adjusting for top-left */
             display: flex;
             justify-content: flex-start; /* Align to start (left) */
             align-items: flex-start; /* Align to start (top) */
@@ -96,7 +120,6 @@
         }
         .modal-content {
             background-color: #1a1a1a;
-            /* Removed margin: auto; */
             padding: 1.5rem; /* Reduced padding for smaller size */
             border-radius: 0.75rem; /* rounded-xl */
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3); /* shadow-xl */
@@ -162,6 +185,8 @@
             text-align: center;
             color: white;
             overflow: hidden;
+            /* Added padding to account for fixed navbar */
+            padding-top: 5rem; 
         }
 
         .main-banner-overlay {
@@ -183,46 +208,73 @@
             z-index: 2; /* Ensure text is above the overlay */
             padding: 2rem;
         }
+        
+        /* Custom animation for the arrow in the button */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-4px); /* Subtle vertical movement */
+            }
+        }
+        .animate-float {
+            animation: float 1.5s ease-in-out infinite;
+        }
     </style>
 </head>
 <body>
 
-    <div class="hero-section">
-        <!-- Navbar -->
-        <nav class="relative z-20 w-full bg-transparent text-white p-4">
-            <div class="container mx-auto flex justify-between items-center">
-                <!-- Logo -->
-                <div class="flex items-center space-x-2">
-                    <!-- SVG for Musico logo -->
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 16H8V8H10V16ZM14 16H12V8H14V16ZM18 16H16V8H18V16Z" fill="white"/>
-                    </svg>
-                    <span class="text-2xl font-bold"><span class="text-lg font-normal">Oronno Sohel Aungkon</span></span>
-                </div>
-
-                <!-- Navigation Links (Hidden on small screens by default) -->
-                <div class="hidden md:flex space-x-6 navbar-menu flex-grow justify-center">
-                    <a href="index.html" class="nav-link">Home</a>
-                    <a href="biography.html" class="nav-link">About</a>
-                    <a href="gallery.html" class="nav-link">Gallery</a>
-                    <a href="bk.html" class="nav-link">Booking</a>
-                    <a href="Video.html" class="nav-link">Video</a>
-                </div>
-
-                <!-- Social Icons (Hidden on small screens by default) -->
-                <div class="hidden md:flex space-x-4 navbar-social">
-                    <a href="https://www.facebook.com/oronnosohelaungkon0" class="text-white hover:text-gray-400"><i class="fab fa-facebook-f"></i></a>
-                   
-                    <a href="https://www.instagram.com/oronnosohelaungkon/" class="text-white hover:text-gray-400"><i class="fab fa-instagram"></i></a>
-                </div>
-
-                <!-- Mobile menu toggle -->
-                <button class="md:hidden text-white focus:outline-none navbar-toggle" onclick="toggleMenu()">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
+    <!-- NAV BAR START (Updated: Fixed position, solid black background, slightly less height) -->
+    <nav class="fixed top-0 left-0 z-50 w-full bg-black text-white py-3 px-4 border-b border-gray-800 navbar">
+        <div class="container mx-auto flex justify-between items-center max-w-6xl">
+            <!-- Logo -->
+            <div class="flex items-center space-x-2">
+                <!-- SVG for Musico logo, color adjusted for contrast -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-red-500">
+                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 16H8V8H10V16ZM14 16H12V8H14V16ZM18 16H16V8H18V16Z" fill="currentColor"/>
+                </svg>
+                <span class="text-2xl font-bold"><span class="text-lg font-normal text-red-500">Oronno Sohel Aungkon</span></span>
             </div>
-        </nav>
-    </div>
+
+            <!-- Navigation Links (Desktop) - Updated with Shop, Equipment, Membership -->
+            <div class="hidden md:flex space-x-6 navbar-menu flex-grow justify-center uppercase font-semibold text-sm tracking-wider">
+                <a href="index.html" class="nav-link text-red-500">Home</a>
+                <a href="shop.html" class="nav-link">Shop</a>
+                <a href="equipment.html" class="nav-link">Equipment</a>
+                <a href="membership.html" class="nav-link">Membership</a>
+                <a href="biography.html" class="nav-link">About</a>
+                <a href="gallery.html" class="nav-link">Gallery</a>
+                <a href="bk.html" class="nav-link">Booking</a>
+                <a href="Video.html" class="nav-link">Video</a>
+            </div>
+
+            <!-- Social Icons (Desktop) -->
+            <div class="hidden md:flex space-x-4 navbar-social">
+                <a href="https://www.facebook.com/oronnosohelaungkon0" class="text-gray-400 hover:text-red-500 transition-colors duration-300"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/oronnosohelaungkon/" class="text-gray-400 hover:text-red-500 transition-colors duration-300"><i class="fab fa-instagram"></i></a>
+            </div>
+
+            <!-- Mobile menu toggle -->
+            <button class="md:hidden text-white focus:outline-none navbar-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Dropdown Links - Updated with Shop, Equipment, Membership -->
+        <!-- The 'active' class toggles the 'display' property from the CSS media query -->
+        <div class="md:hidden navbar-menu absolute top-full left-0 w-full bg-black/95 flex-col transition-all duration-300 shadow-xl" style="display: none;">
+            <a href="index.html" class="nav-link block text-center py-3 px-4 uppercase text-red-500">Home</a>
+            <a href="shop.html" class="nav-link block text-center py-3 px-4 uppercase">Shop</a>
+            <a href="equipment.html" class="nav-link block text-center py-3 px-4 uppercase">Equipment</a>
+            <a href="membership.html" class="nav-link block text-center py-3 px-4 uppercase">Membership</a>
+            <a href="biography.html" class="nav-link block text-center py-3 px-4 uppercase">About</a>
+            <a href="gallery.html" class="nav-link block text-center py-3 px-4 uppercase">Gallery</a>
+            <a href="bk.html" class="nav-link block text-center py-3 px-4 uppercase">Booking</a>
+            <a href="Video.html" class="nav-link block text-center py-3 px-4 uppercase">Video</a>
+        </div>
+    </nav>
+    <!-- NAV BAR END -->
 
     <!-- Main Banner Section with Text Overlay -->
     <section class="main-banner-with-text">
@@ -235,7 +287,7 @@
         </div>
     </section>
 
-    <!-- About Section -->
+    <!-- About Section / Main Content Area -->
     <section class="bg-black text-white py-16 px-4">
         <div class="container mx-auto max-w-4xl">
             <!-- Scroll Indicator -->
@@ -245,7 +297,8 @@
             </div>
 
             <!-- Overview - Redesigned with image and text side-by-side -->
-            <div class="mb-32 flex flex-col md:flex-row items-center md:items-start justify-center md:justify-between">
+            <!-- ADDED ID HERE: overview-section -->
+            <div id="overview-section" class="mb-32 flex flex-col md:flex-row items-center md:items-start justify-center md:justify-between">
                 <!-- Image Column -->
                 <div class="md:w-1/2 flex justify-center mb-8 md:mb-0 overview-image">
                     <img src="IMG-20250505-WA0084.jpg" alt="Oronno Sohel Aungkon" class="rounded-xl shadow-lg w-full max-w-sm">
@@ -280,16 +333,199 @@
                 </div>
             </div>
 
-            <!-- Contact Section -->
+            <!-- START: New Music Releases Section (2025 Singles) -->
             <div class="mb-32 text-center md:text-left">
-                <h3 class="text-5xl md:text-6xl font-extrabold mb-4 text-white">Contact</h3>
+                <h3 class="text-5xl md:text-6xl font-extrabold mb-4 text-white">New Music Releases (2025 Singles)</h3>
                 <hr class="w-24 border-b-4 border-red-600 mx-auto md:mx-0 mb-8">
-                <div class="text-xl md:text-2xl leading-relaxed font-normal text-gray-300">
-                    <p class="mb-2">Email: oronnosohelaungkon@gmail.com</p>
-                    <p class="mb-2">Phone: +880 123 456 7890</p>
-                    <p>Address: Bandarban, Chittagong Division, Bangladesh</p>
+                
+                <!-- TRANSLATED FROM BENGALI: Here is the information for the four new single tracks provided in column format: -->
+                <p class="text-xl md:text-2xl leading-relaxed font-normal text-gray-300 mb-8">
+                    Here is the information for the four new single tracks provided in column format:
+                </p>
+
+                <!-- Music Table -->
+                <div class="overflow-x-auto mb-12">
+                    <table class="min-w-full bg-gray-900 rounded-xl shadow-2xl text-white">
+                        <thead class="bg-red-600 uppercase text-sm tracking-wider">
+                            <tr>
+                                <th scope="col" class="py-3 px-4 text-left">Track Name</th>
+                                <th scope="col" class="py-3 px-4 text-left">Release Type</th>
+                                <th scope="col" class="py-3 px-4 text-left">Released On</th>
+                                <th scope="col" class="py-3 px-4 text-left">Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-800 hover:bg-gray-800 transition-colors duration-200">
+                                <td class="py-3 px-4 text-left font-medium">Oronno Type Music</td>
+                                <td class="py-3 px-4 text-left">Single</td>
+                                <td class="py-3 px-4 text-left">2025</td>
+                                <td class="py-3 px-4 text-left">3:45</td>
+                            </tr>
+                            <tr class="border-b border-gray-800 hover:bg-gray-800 transition-colors duration-200">
+                                <td class="py-3 px-4 text-left font-medium">Strings of Fury</td>
+                                <td class="py-3 px-4 text-left">Single</td>
+                                <td class="py-3 px-4 text-left">2025</td>
+                                <td class="py-3 px-4 text-left">1:45</td>
+                            </tr>
+                            <tr class="border-b border-gray-800 hover:bg-gray-800 transition-colors duration-200">
+                                <td class="py-3 px-4 text-left font-medium">Tears in string</td>
+                                <td class="py-3 px-4 text-left">Single</td>
+                                <td class="py-3 px-4 text-left">2025</td>
+                                <td class="py-3 px-4 text-left">3:03</td>
+                            </tr>
+                            <tr class="hover:bg-gray-800 transition-colors duration-200">
+                                <td class="py-3 px-4 text-left font-medium">Eruption of the mechine</td>
+                                <td class="py-3 px-4 text-left">Single</td>
+                                <td class="py-3 px-4 text-left">2025</td>
+                                <td class="py-3 px-4 text-left">3:09</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Spotify Embeds -->
+                <h4 class="text-3xl font-bold mb-6 text-red-500 text-center md:text-left">Listen on Spotify</h4>
+                <!-- TRANSLATED FROM BENGALI: You can listen to the tracks from Spotify below: -->
+                <p class="text-lg font-normal text-gray-300 mb-6 text-center md:text-left">You can listen to the tracks from Spotify below:</p>
+
+                <div class="flex flex-col space-y-8">
+                    <iframe data-testid="embed-iframe" style="border-radius:12px;" src="https://open.spotify.com/embed/track/3gnYXM7C6E4LP9X6orb1AF?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    <iframe data-testid="embed-iframe" style="border-radius:12px;" src="https://open.spotify.com/embed/track/0fygBQO338y8kkdIGFZK5y?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    <iframe data-testid="embed-iframe" style="border-radius:12px;" src="https://open.spotify.com/embed/track/2qHwFD86iTRaDt6RiqRLDO?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    <iframe data-testid="embed-iframe" style="border-radius:12px;" src="https://open.spotify.com/embed/track/2tQvysIxHxg8vz4hqtU241?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                 </div>
             </div>
+            <!-- END: New Music Releases Section (2025 Singles) -->
+
+            <!-- START: YouTube Subscription Section (Replaced Contact) -->
+            <div class="mb-32 text-center">
+                
+                <!-- NEW: Explore About Link with Animated Arrow -->
+                <a href="#overview-section" class="inline-flex items-center justify-center space-x-2 mb-10 py-3 px-8 text-lg font-bold uppercase tracking-wider text-white bg-red-600 rounded-full hover:bg-red-700 transition-colors duration-300 shadow-lg transform hover:scale-105">
+                    <span>Explore About</span>
+                    <i class="fas fa-arrow-down text-lg animate-float"></i>
+                </a>
+
+                <h3 class="text-5xl md:text-6xl font-extrabold mb-4 text-white">Stay Connected!</h3>
+                <hr class="w-24 border-b-4 border-red-600 mx-auto mb-8">
+                <p class="text-xl md:text-2xl leading-relaxed font-normal text-gray-300 mb-8">
+                    Enter your email to join the official Oronno Sohel Aungkon mailing list and subscribe to the YouTube channel!
+                </p>
+
+                <div class="max-w-md mx-auto p-6 bg-gray-900 rounded-xl shadow-2xl">
+                    <!-- User requested text: Enter your email -->
+                    <p class="text-lg font-semibold mb-4 text-white">Enter your email</p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <input type="email" id="subscriberEmail" placeholder="Your email" class="w-full sm:flex-1 p-3 rounded-lg bg-black border border-gray-700 text-white focus:ring-2 focus:ring-red-500 focus:border-red-500" />
+                        <!-- User requested button text: Subscribe -->
+                        <button onclick="subscribeEmail()" class="w-full sm:w-auto p-3 rounded-lg bg-red-600 hover:bg-red-700 text-white font-bold uppercase tracking-wider transition-colors duration-300">
+                            Subscribe
+                        </button>
+                    </div>
+                    <p id="subscribeMessage" class="mt-4 text-sm text-green-400 opacity-0 transition-opacity duration-500">Thank you for subscribing!</p>
+                </div>
+            </div>
+            <!-- END: YouTube Subscription Section -->
+        </div>
+    </section>
+
+    <!-- Membership Tiers Section (UPDATED FOR DIRECT NAVIGATION) -->
+    <section class="min-h-screen bg-black text-white py-16 px-4">
+        <div class="container mx-auto max-w-6xl">
+
+            <!-- Header -->
+            <header class="text-center mb-16 pt-8">
+                <p class="text-sm font-medium uppercase tracking-widest text-red-500 mb-2">Join the Inner Circle</p>
+                <h1 class="text-5xl md:text-7xl font-extrabold mb-4">Choose Your Membership</h1>
+                <p class="text-lg text-gray-400 max-w-3xl mx-auto">Access exclusive content, early releases, and direct interactions with Oronno by joining one of our premium tiers.</p>
+                
+            </header>
+
+            <!-- Pricing Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
+                
+                <!-- Tier 1: Fan Access -->
+                <div class="bg-gray-900 rounded-xl shadow-2xl p-8 border-t-4 border-gray-700 hover:border-red-500 transform hover:scale-[1.02] transition-all duration-300">
+                    <p class="text-xs font-medium uppercase tracking-widest text-gray-400 mb-2">Tier I</p>
+                    <h2 class="text-4xl font-bold mb-4 text-white">Fan Access</h2>
+                    <p class="text-5xl font-extrabold text-red-500 mb-6">$5<span class="text-xl font-normal text-gray-400">/mo</span></p>
+
+                    <ul class="space-y-4 text-gray-300 mb-10">
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-500 mr-3"></i> Exclusive digital wallpapers</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-500 mr-3"></i> Access to all Public Q&A recordings</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-500 mr-3"></i> Weekly email updates</li>
+                        <li class="flex items-center text-gray-600"><i class="fas fa-times-circle mr-3"></i> Private Discord access</li>
+                        <li class="flex items-center text-gray-600"><i class="fas fa-times-circle mr-3"></i> Shop discounts</li>
+                    </ul>
+
+                    <button 
+                        onclick="window.location.href='membership.html'"
+                        class="w-full bg-gray-700 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300 uppercase tracking-wider">
+                        Sign Up Now
+                    </button>
+                </div>
+
+                <!-- Tier 2: Backstage Pass (Recommended) -->
+                <div class="bg-gray-800 rounded-xl shadow-2xl p-8 border-t-4 border-red-500 transform scale-[1.05] relative z-10">
+                    <div class="absolute top-0 -mt-4 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl">
+                        Most Popular
+                    </div>
+                    <p class="text-xs font-medium uppercase tracking-widest text-gray-400 mb-2 pt-4">Tier II</p>
+                    <h2 class="text-4xl font-bold mb-4 text-red-500">Backstage Pass</h2>
+                    <p class="text-5xl font-extrabold text-red-500 mb-6">$15<span class="text-xl font-normal text-gray-400">/mo</span></p>
+
+                    <ul class="space-y-4 text-gray-300 mb-10">
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-500 mr-3"></i> **All Fan Access benefits**</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-500 mr-3"></i> **15% discount on all shop merchandise**</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-500 mr-3"></i> Exclusive behind-the-scenes video logs</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-500 mr-3"></i> Private members-only Discord access</li>
+                        <li class="flex items-center text-gray-400"><i class="fas fa-times-circle mr-3"></i> Monthly private video call/Q&A</li>
+                    </ul>
+
+                    <button 
+                        onclick="window.location.href='membership.html'"
+                        class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300 uppercase tracking-wider shadow-lg">
+                        Join the Backstage
+                    </button>
+                </div>
+                
+                <!-- Tier 3: VIP All-Access -->
+                <div class="bg-gray-900 rounded-xl shadow-2xl p-8 border-t-4 border-gray-700 hover:border-red-500 transform hover:scale-[1.02] transition-all duration-300">
+                    <p class="text-xs font-medium uppercase tracking-widest text-gray-400 mb-2">Tier III</p>
+                    <h2 class="text-4xl font-bold mb-4 text-white">VIP All-Access</h2>
+                    <p class="text-5xl font-extrabold text-red-500 mb-6">$40<span class="text-xl font-normal text-gray-400">/mo</span></p>
+
+                    <ul class="space-y-4 text-gray-300 mb-10">
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-500 mr-3"></i> **All Backstage Pass benefits**</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-500 mr-3"></i> **30% discount on all shop merchandise**</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-500 mr-3"></i> Early bird access to all concert tickets</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-500 mr-3"></i> Exclusive access to new song demos</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-500 mr-3"></i> **Monthly private video call/Q&A**</li>
+                    </ul>
+
+                    <button 
+                        onclick="window.location.href='membership.html'"
+                        class="w-full bg-gray-700 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300 uppercase tracking-wider">
+                        Go VIP
+                    </button>
+                </div>
+            </div>
+
+            <!-- FAQ or Info Section -->
+            <div class="mt-20 text-center">
+                    <h2 class="text-4xl font-extrabold mb-8 text-red-500">Membership FAQs</h2>
+                    <div class="space-y-6 max-w-4xl mx-auto text-left">
+                        <div class="bg-gray-900 p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold mb-2">How do I cancel my membership?</h3>
+                            <p class="text-gray-400">You can cancel your subscription anytime via your account dashboard without any cancellation fees. Access remains until the end of the current billing cycle.</p>
+                        </div>
+                        <div class="bg-gray-900 p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold mb-2">Are there annual payment options?</h3>
+                            <p class="text-gray-400">Yes! We offer a discounted annual rate for all tiers. Simply select the annual option during checkout to save up to 2 months' worth of fees.</p>
+                        </div>
+                    </div>
+            </div>
+
         </div>
     </section>
 
@@ -309,9 +545,14 @@
                     <h4 class="text-xl font-semibold mb-4">Quick Links</h4>
                     <ul class="space-y-2">
                         <li><a href="index.html" class="text-gray-300 hover:text-white transition-colors duration-300">Home</a></li>
+                        <!-- Footer links updated -->
+                        <li><a href="shop.html" class="text-gray-300 hover:text-white transition-colors duration-300">Shop</a></li>
+                        <li><a href="equipment.html" class="text-gray-300 hover:text-white transition-colors duration-300">Equipment</a></li>
+                        <li><a href="membership.html" class="text-gray-300 hover:text-white transition-colors duration-300">Membership</a></li>
+                        <!-- End updated -->
                         <li><a href="biography.html" class="text-gray-300 hover:text-white transition-colors duration-300">About</a></li>
                         <li><a href="gallery.html" class="text-gray-300 hover:text-white transition-colors duration-300">Gallery</a></li>
-                        <li><a href="biography.html" class="text-gray-300 hover:text-white transition-colors duration-300">Booking</a></li>
+                        <li><a href="bk.html" class="text-gray-300 hover:text-white transition-colors duration-300">Booking</a></li>
                         <li><a href="Video.html" class="text-gray-300 hover:text-white transition-colors duration-300">Video</a></li>
                     </ul>
                 </div>
@@ -322,7 +563,7 @@
                     <div class="flex justify-center md:justify-end space-x-4 mb-4">
                         <a href="https://www.facebook.com/oronnosohelaungkon0" class="text-gray-300 hover:text-white transition-colors duration-300 text-2xl"><i class="fab fa-facebook-f"></i></a>
                         <a href="https://www.instagram.com/oronnosohelaungkon/" class="text-gray-300 hover:text-white transition-colors duration-300 text-2xl"><i class="fab fa-instagram"></i></a>
-                        <a href="https://www.youtube.com/@oronnosohelaungkon	" class="text-gray-300 hover:text-white transition-colors duration-300 text-2xl"><i class="fab fa-youtube"></i></a>
+                        <a href="https://www.youtube.com/@oronnosohelaungkon    " class="text-gray-300 hover:text-white transition-colors duration-300 text-2xl"><i class="fab fa-youtube"></i></a>
                     </div>
                     <p class="text-gray-400 text-sm">Follow for the latest updates, new releases, and behind-the-scenes content.</p>
                 </div>
@@ -338,7 +579,7 @@
         </div>
     </footer>
 
-    <!-- Custom Warning Modal -->
+    <!-- Custom Warning Modal (Used for right-click and temporary success messages) -->
     <div id="warningModal" class="modal hidden">
         <div class="modal-content">
             <span class="close-button" onclick="closeModal()">&times;</span>
@@ -347,26 +588,47 @@
             <p class="text-sm">You can't right-click on this page. Lol!</p>
         </div>
     </div>
+    
+    <!-- NOTE: Payment Simulation Modal has been removed as per request. -->
 
     <script>
         // Initialize Tone.js synth for warning sound
         const synth = new Tone.Synth().toDestination();
+        
+        // --- Modal Elements ---
+        const warningModal = document.getElementById('warningModal');
+        const successMessage = document.querySelector('#warningModal .modal-content p.text-xl');
+        const detailsMessage = document.querySelector('#warningModal .modal-content p.text-sm');
+        const icon = document.querySelector('#warningModal .modal-content i');
+
 
         /**
          * Toggles the visibility of the mobile navigation menu.
          */
         function toggleMenu() {
-            const menu = document.querySelector('.navbar-menu');
-            menu.classList.toggle('active');
+            const menu = document.querySelector('.md\\:hidden.navbar-menu');
+            const menuIsActive = menu.style.display === 'flex';
+            
+            if (menuIsActive) {
+                menu.style.display = 'none';
+            } else {
+                // Ensure Tone context is running before playing sound on interaction
+                if (Tone.context.state !== 'running') {
+                    Tone.start();
+                }
+                menu.style.display = 'flex';
+                // Play a subtle tone when the menu opens
+                synth.triggerAttackRelease("G4", "16n");
+            }
         }
 
-        // Get the modal element
-        const warningModal = document.getElementById('warningModal');
-
         /**
-         * Displays the custom warning modal and plays a sound.
+         * Displays the custom warning modal (also used for success messages).
          */
         function showModal() {
+            if (Tone.context.state !== 'running') {
+                Tone.start();
+            }
             warningModal.classList.remove('hidden');
             warningModal.classList.add('flex'); // Use flex to center content
             // Play a short sound
@@ -393,6 +655,43 @@
                 closeModal();
             }
         });
+
+        /**
+         * Handles the YouTube/Email Subscription button click.
+         * This function currently provides simulated feedback.
+         */
+        function subscribeEmail() {
+            const emailInput = document.getElementById('subscriberEmail');
+            const messageElement = document.getElementById('subscribeMessage');
+            const email = emailInput.value.trim();
+
+            if (email && emailInput.checkValidity()) {
+                // Simulated success feedback
+                messageElement.textContent = `Thank you for subscribing, ${email}!`;
+                messageElement.classList.remove('opacity-0', 'text-yellow-400');
+                messageElement.classList.add('opacity-100', 'text-green-400');
+                
+                // Clear the input after success
+                emailInput.value = '';
+
+                // Hide the message after a few seconds
+                setTimeout(() => {
+                    messageElement.classList.remove('opacity-100');
+                    messageElement.classList.add('opacity-0');
+                }, 4000);
+
+            } else {
+                // Simulated error/warning feedback
+                messageElement.textContent = 'Please enter a valid email address.';
+                messageElement.classList.remove('opacity-0', 'text-green-400');
+                messageElement.classList.add('opacity-100', 'text-yellow-400');
+
+                setTimeout(() => {
+                    messageElement.classList.remove('opacity-100');
+                    messageElement.classList.add('opacity-0');
+                }, 4000);
+            }
+        }
     </script>
 </body>
 </html>

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oronno Sohel Aungkon - Equipment Showcase</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000;
+            padding-top: 64px; /* Space for the fixed navbar */
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            transition: background-color 0.3s ease;
+        }
+        .nav-link {
+            transition: color 0.3s ease, border-bottom 0.3s ease;
+            position: relative;
+            padding-bottom: 5px;
+            color: #ccc;
+        }
+        .nav-link:hover:not(.text-red-500) {
+            color: #FF0000;
+        }
+        /* Link underline effect on hover */
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: #FF0000;
+            transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+        }
+        .nav-link:hover::after:not(.text-red-500::after) {
+            width: 100%;
+            left: 0;
+        }
+        
+        /* Responsive Navbar */
+        @media (max-width: 768px) {
+            .navbar-menu { display: none; }
+            .navbar-social { display: none; }
+            .navbar-toggle { display: block; }
+            .navbar-menu.active {
+                display: flex;
+                flex-direction: column;
+                position: fixed;
+                top: 64px;
+                left: 0;
+                width: 100%;
+                background-color: rgba(0, 0, 0, 0.98);
+                padding: 1rem 0;
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+                z-index: 50;
+                height: calc(100vh - 64px);
+                overflow-y: auto;
+            }
+            .navbar-menu.active a {
+                padding: 1rem 1rem;
+                text-align: center;
+                border-bottom: 1px solid #1a1a1a;
+                font-weight: 600;
+            }
+        }
+        
+        /* Equipment Card Styles */
+        .equipment-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-bottom: 4px solid transparent;
+        }
+        .equipment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 0, 0, 0.1);
+            border-color: #FF0000;
+        }
+        /* Custom button styling for the new 'Specs' link */
+        .specs-link {
+            display: inline-block;
+            background-color: #dc2626; /* red-600 */
+            color: white;
+            font-weight: 500;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            border-radius: 0.5rem;
+            transition-property: background-color;
+            transition-duration: 300ms;
+        }
+        .specs-link:hover {
+            background-color: #b91c1c; /* red-700 */
+        }
+        /* Endorsement Logo Hover Effect */
+        .logo-container {
+            filter: grayscale(100%);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+        .logo-container:hover {
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+        .logo-container img {
+            max-height: 50px; /* Ensure logos are visible and uniform */
+            width: auto;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV BAR START -->
+    <nav class="fixed top-0 left-0 z-50 w-full bg-black/90 backdrop-blur-sm text-white p-4 border-b border-gray-800 navbar">
+        <div class="container mx-auto flex justify-between items-center max-w-6xl">
+            <!-- Logo -->
+            <div class="flex items-center space-x-2">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-red-500">
+                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 16H8V8H10V16ZM14 16H12V8H14V16ZM18 16H16V8H18V16Z" fill="currentColor"/>
+                </svg>
+                <span class="text-2xl font-bold"><span class="text-lg font-normal text-red-500">Oronno Sohel Aungkon</span></span>
+            </div>
+
+            <!-- Navigation Links (Desktop) - 'Equipment' is active -->
+            <div class="hidden md:flex space-x-6 navbar-menu flex-grow justify-center uppercase font-semibold text-sm tracking-wider">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="shop.html" class="nav-link">Shop</a>
+                <a href="equipment.html" class="nav-link text-red-500">Equipment</a> <!-- ACTIVE LINK -->
+                <a href="membership.html" class="nav-link">Membership</a>
+                <a href="biography.html" class="nav-link">About</a>
+                <a href="gallery.html" class="nav-link">Gallery</a>
+                <a href="bk.html" class="nav-link">Booking</a>
+                <a href="Video.html" class="nav-link">Video</a>
+            </div>
+
+            <!-- Social Icons (Desktop) -->
+            <div class="hidden md:flex space-x-4 navbar-social">
+                <a href="https://www.facebook.com/oronnosohelaungkon0" class="text-gray-400 hover:text-red-500 transition-colors duration-300"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/oronnosohelaungkon/" class="text-gray-400 hover:text-red-500 transition-colors duration-300"><i class="fab fa-instagram"></i></a>
+            </div>
+
+            <!-- Mobile menu toggle -->
+            <button class="md:hidden text-white focus:outline-none navbar-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Dropdown Links - 'Equipment' is active -->
+        <div class="md:hidden navbar-menu absolute top-full left-0 w-full bg-black/95 flex-col transition-all duration-300 shadow-xl" style="display: none;">
+            <a href="index.html" class="nav-link block text-center py-3 px-4 uppercase">Home</a>
+            <a href="shop.html" class="nav-link block text-center py-3 px-4 uppercase">Shop</a>
+            <a href="equipment.html" class="nav-link block text-center py-3 px-4 uppercase text-red-500">Equipment</a> <!-- ACTIVE LINK -->
+            <a href="membership.html" class="nav-link block text-center py-3 px-4 uppercase">Membership</a>
+            <a href="biography.html" class="nav-link block text-center py-3 px-4 uppercase">About</a>
+            <a href="gallery.html" class="nav-link block text-center py-3 px-4 uppercase">Gallery</a>
+            <a href="bk.html" class="nav-link block text-center py-3 px-4 uppercase">Booking</a>
+            <a href="Video.html" class="nav-link block text-center py-3 px-4 uppercase">Video</a>
+        </div>
+    </nav>
+    <!-- NAV BAR END -->
+
+    <!-- Equipment Showcase Section -->
+    <section class="min-h-screen bg-black text-white py-16 px-4">
+        <div class="container mx-auto max-w-6xl">
+
+            <!-- Header -->
+            <header class="text-center mb-16 pt-8">
+                <p class="text-sm font-medium uppercase tracking-widest text-red-500 mb-2">The Musician's Arsenal</p>
+                <h1 class="text-5xl md:text-7xl font-extrabold mb-4">Oronno's Gear Setup</h1>
+                <p class="text-lg text-gray-400 max-w-3xl mx-auto">A look at the instruments, amplifiers, and effects that shape the unique sound of Oronno Sohel Aungkon, both on stage and in the studio.</p>
+            </header>
+
+            <!-- Equipment Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Equipment 1: Main Bass Guitar (Fender Jazz Bass) -->
+                <div class="bg-gray-900 rounded-xl shadow-2xl overflow-hidden equipment-card">
+                    <img src="https://media.guitarcenter.com/is/image/MMGS7/000000121044539-00-600x600.jpg"
+                         alt="Signature Fender Jazz Bass"
+                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/6B7280/ffffff?text=Image+Missing';"
+                         class="w-full h-56 object-cover">
+
+                    <div class="p-6">
+                        <p class="text-xs font-medium uppercase tracking-widest text-red-500 mb-1">Primary Instrument</p>
+                        <h3 class="text-3xl font-bold mb-3 text-white">Fender Jazz Bass (Modded)</h3>
+                        <p class="text-gray-400 mb-4 text-sm">
+                            The backbone of the live sound. Heavily modified with custom pickups and a pre-amp for unmatched tonal versatility, from funk slaps to deep grooves.
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-semibold text-gray-300">USA Deluxe Series</span>
+                            <!-- Link to official product page -->
+                            <a href="https://www.fender.com/en-US/electric-basses/jazz-bass/" target="_blank" class="specs-link">
+                                Specs
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Equipment 2: Amplifier Head (Ampeg SVT-CL Classic) -->
+                <div class="bg-gray-900 rounded-xl shadow-2xl overflow-hidden equipment-card">
+                    <img src="https://www.bustedgear.com/images/jobs/Ampeg_svt_classic/front.jpg"
+                         alt="Ampeg SVT-CL Classic Amplifier Head"
+                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/6B7280/ffffff?text=Image+Missing';"
+                         class="w-full h-56 object-cover">
+
+                    <div class="p-6">
+                        <p class="text-xs font-medium uppercase tracking-widest text-red-500 mb-1">Powerhouse</p>
+                        <h3 class="text-3xl font-bold mb-3 text-white">Ampeg SVT-CL Classic</h3>
+                        <p class="text-gray-400 mb-4 text-sm">
+                            The legendary 300W all-tube amp, providing the classic, growling, and punchy tone needed for arena-sized sound and studio warmth.
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-semibold text-gray-300">300 Watt Tube</span>
+                            <!-- Link to official product page -->
+                            <a href="https://ampeg.com/products/pro/svtcl/" target="_blank" class="specs-link">
+                                Specs
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Equipment 3: Pedal Board (Darkglass Alpha Omega) -->
+                <div class="bg-gray-900 rounded-xl shadow-2xl overflow-hidden equipment-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSV-IZgqTx-p88PkP8ni22oiG4hsZTFvI4EQ&s"
+                         alt="Darkglass Alpha Omega Pedal"
+                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/6B7280/ffffff?text=Image+Missing';"
+                         class="w-full h-56 object-cover">
+
+                    <div class="p-6">
+                        <p class="text-xs font-medium uppercase tracking-widest text-red-500 mb-1">Effects Chain</p>
+                        <h3 class="text-3xl font-bold mb-3 text-white">Darkglass Alpha Omega</h3>
+                        <p class="text-gray-400 mb-4 text-sm">
+                            A custom-built pedal board centered around the Darkglass Alpha Omega for modern distortion and drive, supplemented by a Wah and Octave pedal.
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-semibold text-gray-300">Distortion & FX</span>
+                            <!-- Link to official product page -->
+                            <a href="https://www.darkglass.com/creations/alpha-omega/" target="_blank" class="specs-link">
+                                Specs
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Equipment 4: Acoustic Bass (Warwick StarBass) -->
+                <div class="bg-gray-900 rounded-xl shadow-2xl overflow-hidden equipment-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVdivzSwrFwQ5lX26_QS7ji-dBrAs2iU5UQw&s"
+                         alt="Warwick StarBass Acoustic Bass"
+                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/6B7280/ffffff?text=Image+Missing';"
+                         class="w-full h-56 object-cover">
+
+                    <div class="p-6">
+                        <p class="text-xs font-medium uppercase tracking-widest text-red-500 mb-1">Unplugged Sessions</p>
+                        <h3 class="text-3xl font-bold mb-3 text-white">Warwick StarBass</h3>
+                        <p class="text-gray-400 mb-4 text-sm">
+                            Used primarily for recording acoustic tracks and intimate unplugged performances. Provides a woody, deep, and resonant tone perfect for jazz fusion.
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-semibold text-gray-300">Semi-Hollow Body</span>
+                            <!-- Link to official product page -->
+                            <a href="https://shop.warwick.de/en/basses/star-bass" target="_blank" class="specs-link">
+                                Specs
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Equipment 5: Studio Interface (Focusrite Scarlett 18i20) -->
+                <div class="bg-gray-900 rounded-xl shadow-2xl overflow-hidden equipment-card">
+                    <img src="https://downloads.focusrite.com/sites/downloads/files/styles/webp/public/2021-10/scarlett_18i20_2nd_gen.png.webp?itok=bs3m8zn5"
+                         alt="Focusrite Scarlett 18i20 Audio Interface"
+                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/6B7280/ffffff?text=Image+Missing';"
+                         class="w-full h-56 object-cover">
+
+                    <div class="p-6">
+                        <p class="text-xs font-medium uppercase tracking-widest text-red-500 mb-1">Home Studio</p>
+                        <h3 class="text-3xl font-bold mb-3 text-white">Focusrite Scarlett 18i20</h3>
+                        <p class="text-gray-400 mb-4 text-sm">
+                            High-fidelity audio interface crucial for recording demos and final tracks with minimal latency and crystal-clear preamps.
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-semibold text-gray-300">18-in / 20-out</span>
+                            <!-- Link to official product page -->
+                            <a href="https://focusrite.com/en/usb-audio-interface/scarlett/scarlett-18i20" target="_blank" class="specs-link">
+                                Specs
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Equipment 6: Bass Cabinet (Ampeg 8x10 Cabinet) -->
+                <div class="bg-gray-900 rounded-xl shadow-2xl overflow-hidden equipment-card">
+                    <img src="https://musiccityvintageguitars.com/cdn/shop/files/F6A1078.jpg?v=1699329118&width=2143"
+                         alt="Ampeg 8x10 Bass Cabinet"
+                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/6B7280/ffffff?text=Image+Missing';"
+                         class="w-full h-56 object-cover">
+
+                    <div class="p-6">
+                        <p class="text-xs font-medium uppercase tracking-widest text-red-500 mb-1">On-Stage Thump</p>
+                        <h3 class="text-3xl font-bold mb-3 text-white">Ampeg 8x10 Cabinet</h3>
+                        <p class="text-gray-400 mb-4 text-sm">
+                            The classic 8x10 speaker cabinet, known as the "Fridge." Essential for moving serious air and translating the SVT-CL's power into earth-shaking bass.
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-semibold text-gray-300">800W RMS</span>
+                            <!-- Link to official product page -->
+                            <a href="https://ampeg.com/products/classic/svt810e/" target="_blank" class="specs-link">
+                                Specs
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- --- -->
+            <!-- Endorsements Section -->
+            <div class="mt-20 mb-20">
+                <header class="text-center mb-10">
+                    <h2 class="text-4xl font-extrabold mb-4 text-red-500">Official Endorsements</h2>
+                    <p class="text-lg text-gray-400 max-w-3xl mx-auto">
+                        Proud partnerships with leading music brands that supply the highest quality gear for performance and recording.
+                    </p>
+                </header>
+
+                <!-- Logos Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 items-center justify-items-center bg-gray-900 p-8 rounded-xl shadow-inner border border-gray-800">
+                    
+                    <!-- Fender Logo -->
+                    <div class="logo-container p-4 transform hover:scale-105 transition duration-300 w-full max-w-[200px]">
+                        <img src="https://images.seeklogo.com/logo-png/5/1/fender-logo-png_seeklogo-53633.png" alt="Fender Endorsement" class="mx-auto">
+                    </div>
+
+                    <!-- Ampeg Logo -->
+                    <div class="logo-container p-4 transform hover:scale-105 transition duration-300 w-full max-w-[200px]">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Ampeg_logo.jpg" alt="Ampeg Endorsement" class="mx-auto">
+                    </div>
+                    
+                    <!-- Darkglass Logo -->
+                    <div class="logo-container p-4 transform hover:scale-105 transition duration-300 w-full max-w-[200px]">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Darkglass.svg/1200px-Darkglass.svg.png" alt="Darkglass Endorsement" class="mx-auto">
+                    </div>
+                    
+                    <!-- Focusrite Logo -->
+                    <div class="logo-container p-4 transform hover:scale-105 transition duration-300 w-full max-w-[200px]">
+                        <img src="https://aes2.org/wp-content/uploads/2021/07/Focusrite-01.png" alt="Focusrite Endorsement" class="mx-auto">
+                    </div>
+                </div>
+            </div>
+            <!-- END Endorsements Section -->
+            <!-- --- -->
+
+            <!-- General Info -->
+            <div class="mt-20 text-center max-w-4xl mx-auto">
+                 <h2 class="text-4xl font-extrabold mb-8 text-red-500">The Philosophy of Tone</h2>
+                 <p class="text-lg text-gray-400">
+                    Oronno believes that gear is just a tool, but the right tools can unlock new sonic possibilities. Every piece of equipment in this collection is chosen not for its price tag, but for its unique contribution to the final, expressive tone.
+                 </p>
+                 <a href="biography.html" class="inline-block mt-8 text-red-500 hover:text-red-400 font-semibold border-b border-red-500 transition-colors duration-300">
+                    Read More About Oronno's Musical Journey <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                 </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="bg-black text-white py-12 px-4 border-t border-gray-800">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-col md:flex-row justify-between items-center md:items-start space-y-8 md:space-y-0 md:space-x-8">
+                <!-- Signature/Logo and Description -->
+                <div class="flex flex-col items-center md:items-start text-center md:text-left md:w-1/3">
+                    <img src="https://placehold.co/200x50/333/fff?text=Signature" alt="Signature" class="mb-4 w-48 h-auto">
+                    <p class="text-gray-400 text-sm">Pioneer bassist from Bangladesh. Official member of Khola Chhad Unlimited. Passionate musician dedicated to performance, composition & creativity.</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="md:w-1/3 text-center md:text-left">
+                    <h4 class="text-xl font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-300 hover:text-white transition-colors duration-300">Home</a></li>
+                        <li><a href="shop.html" class="text-gray-300 hover:text-white transition-colors duration-300">Shop</a></li>
+                        <li><a href="equipment.html" class="text-red-500 font-bold transition-colors duration-300">Equipment</a></li> <!-- ACTIVE LINK -->
+                        <li><a href="membership.html" class="text-gray-300 hover:text-white transition-colors duration-300">Membership</a></li>
+                        <li><a href="biography.html" class="text-gray-300 hover:text-white transition-colors duration-300">About</a></li>
+                        <li><a href="gallery.html" class="text-gray-300 hover:text-white transition-colors duration-300">Gallery</a></li>
+                        <li><a href="bk.html" class="text-gray-300 hover:text-white transition-colors duration-300">Booking</a></li>
+                        <li><a href="Video.html" class="text-gray-300 hover:text-white transition-colors duration-300">Video</a></li>
+                    </ul>
+                </div>
+
+                <!-- Connect / Social Media -->
+                <div class="md:w-1/3 text-center md:text-right">
+                    <h4 class="text-xl font-semibold mb-4">Connect</h4>
+                    <div class="flex justify-center md:justify-end space-x-4 mb-4">
+                        <a href="https://www.facebook.com/oronnosohelaungkon0" class="text-gray-300 hover:text-red-500 transition-colors duration-300 text-2xl"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/oronnosohelaungkon/" class="text-gray-300 hover:text-red-500 transition-colors duration-300 text-2xl"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.youtube.com/@oronnosohelaungkon	" class="text-gray-300 hover:text-red-500 transition-colors duration-300 text-2xl"><i class="fab fa-youtube"></i></a>
+                    </div>
+                    <p class="text-gray-400 text-sm">Follow for the latest updates, new releases, and behind-the-scenes content.</p>
+                </div>
+            </div>
+
+            <hr class="border-gray-700 my-8">
+
+            <!-- Copyright and Developed By -->
+            <div class="flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
+                <p>&copy; 2025 Oronno Sohel Aungkon. All rights reserved.</p>
+                <p>Developed by <span class="text-red-500">&hearts;</span> by O.S.A. Technology</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Utility Script Block -->
+    <script>
+        // Disable right-click context menu to prevent content access
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        }, false);
+        
+        // Other utility functions
+        window.toggleMenu = function() {
+            const menu = document.querySelector('.md\\:hidden.navbar-menu');
+            const menuIsActive = menu.style.display === 'flex';
+            
+            if (menuIsActive) {
+                menu.style.display = 'none';
+            } else {
+                menu.style.display = 'flex';
+            }
+        };
+    </script>
+</body>
+</html>

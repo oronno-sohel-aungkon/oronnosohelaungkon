@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oronno Sohel Aungkon - Shop</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for social icons, star ratings, and cart -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Tone.js for sound effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000;
+            padding-top: 64px; /* Space for the fixed navbar */
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            transition: background-color 0.3s ease;
+        }
+        .nav-link {
+            transition: color 0.3s ease, border-bottom 0.3s ease;
+            position: relative;
+            padding-bottom: 5px;
+            color: #ccc;
+        }
+        .nav-link:hover:not(.text-red-500) {
+            color: #FF0000;
+        }
+        /* Link underline effect on hover */
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: #FF0000;
+            transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+        }
+        .nav-link:hover::after:not(.text-red-500::after) {
+            width: 100%;
+            left: 0;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+        .modal-content {
+            background-color: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 450px; 
+            text-align: left;
+            color: white;
+            position: relative;
+            animation: slideUp 0.3s ease-out;
+        }
+        .close-button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            color: #aaa;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Cart Panel Styles */
+        #cartPanel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 350px;
+            height: 100%;
+            background-color: #1a1a1a;
+            z-index: 999;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+            padding-bottom: 70px; /* Space for fixed totals at bottom */
+        }
+        #cartPanel.open {
+            transform: translateX(0);
+        }
+        #cartItemsContainer {
+            height: calc(100% - 300px); /* Adjusted for new coupon input */
+            overflow-y: auto;
+        }
+        .cart-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #000;
+            padding: 1rem;
+            border-top: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV BAR START -->
+    <nav class="fixed top-0 left-0 z-50 w-full bg-black/90 backdrop-blur-sm text-white p-4 border-b border-gray-800 navbar">
+        <div class="container mx-auto flex justify-between items-center max-w-6xl">
+            <!-- Logo -->
+            <div class="flex items-center space-x-2">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-red-500">
+                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 16H8V8H10V16ZM14 16H12V8H14V16ZM18 16H16V8H18V16Z" fill="currentColor"/>
+                </svg>
+                <span class="text-2xl font-bold"><span class="text-lg font-normal text-red-500">Oronno Sohel Aungkon</span></span>
+            </div>
+
+            <!-- Navigation Links (Desktop) - 'Shop' is active -->
+            <div class="hidden md:flex space-x-6 navbar-menu flex-grow justify-center uppercase font-semibold text-sm tracking-wider">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="shop.html" class="nav-link text-red-500">Shop</a> <!-- ACTIVE LINK -->
+                <a href="equipment.html" class="nav-link">Equipment</a>
+                <a href="membership.html" class="nav-link">Membership</a>
+                <a href="biography.html" class="nav-link">About</a>
+                <a href="gallery.html" class="nav-link">Gallery</a>
+                <a href="bk.html" class="nav-link">Booking</a>
+                <a href="Video.html" class="nav-link">Video</a>
+            </div>
+
+            <!-- Social Icons & Cart (Desktop/Mobile) -->
+            <div class="flex items-center space-x-4 navbar-social">
+                <!-- Cart Icon -->
+                <button onclick="toggleCart()" class="relative text-gray-400 hover:text-red-500 transition-colors duration-300">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span id="cartCount" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center transition-opacity duration-300 opacity-0">0</span>
+                </button>
+                <a href="https://www.facebook.com/oronnosohelaungkon0" class="hidden md:block text-gray-400 hover:text-red-500 transition-colors duration-300"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/oronnosohelaungkon/" class="hidden md:block text-gray-400 hover:text-red-500 transition-colors duration-300"><i class="fab fa-instagram"></i></a>
+            </div>
+
+            <!-- Mobile menu toggle -->
+            <button class="md:hidden text-white focus:outline-none navbar-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Dropdown Links - 'Shop' is active -->
+        <div class="md:hidden navbar-menu absolute top-full left-0 w-full bg-black/95 flex-col transition-all duration-300 shadow-xl" style="display: none;">
+            <a href="index.html" class="nav-link block text-center py-3 px-4 uppercase">Home</a>
+            <a href="shop.html" class="nav-link block text-center py-3 px-4 uppercase text-red-500">Shop</a> <!-- ACTIVE LINK -->
+            <a href="equipment.html" class="nav-link block text-center py-3 px-4 uppercase">Equipment</a>
+            <a href="membership.html" class="nav-link block text-center py-3 px-4 uppercase">Membership</a>
+            <a href="biography.html" class="nav-link block text-center py-3 px-4 uppercase">About</a>
+            <a href="gallery.html" class="nav-link block text-center py-3 px-4 uppercase">Gallery</a>
+            <a href="bk.html" class="nav-link block text-center py-3 px-4 uppercase">Booking</a>
+            <a href="Video.html" class="nav-link block text-center py-3 px-4 uppercase">Video</a>
+        </div>
+    </nav>
+    <!-- NAV BAR END -->
+
+    <!-- Shop Content Section -->
+    <section class="min-h-screen bg-black text-white py-16 px-4">
+        <div class="container mx-auto max-w-6xl">
+
+            <!-- Header -->
+            <header class="text-center mb-12 pt-8">
+                <p class="text-sm font-medium uppercase tracking-widest text-red-500 mb-2">Exclusive Merch & Gear</p>
+                <h1 class="text-5xl md:text-7xl font-extrabold mb-4">The Official Store</h1>
+                <p class="text-lg text-gray-400 max-w-3xl mx-auto">Support the music and the journey! Find limited edition apparel, signed albums, and the gear Oronno uses every day.</p>
+            </header>
+
+            <!-- Search and Filter Bar -->
+            <div class="mb-12 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4">
+                <!-- Search Input -->
+                <div class="w-full md:w-1/2 relative">
+                    <input id="searchInput" type="text" placeholder="Search by product name, category, or price..." class="w-full p-3 pl-10 bg-gray-900 border border-gray-700 rounded-lg focus:ring-red-500 focus:border-red-500 text-white placeholder-gray-500 transition-all duration-300">
+                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                </div>
+                
+                <!-- Filters and Button -->
+                <div class="w-full md:w-1/2 flex space-x-4">
+                    <!-- Country Select / Currency Converter -->
+                    <select id="countrySelect" class="w-1/3 p-3 bg-gray-900 border border-gray-700 rounded-lg text-white appearance-none transition-all duration-300 cursor-pointer">
+                        <option value="USD" data-rate="1.0" data-symbol="$">USA (USD)</option>
+                        <option value="BDT" data-rate="110.0" data-symbol="৳">Bangladesh (BDT)</option>
+                        <option value="INR" data-rate="83.0" data-symbol="₹">India (INR)</option>
+                        <option value="EUR" data-rate="0.92" data-symbol="€">Europe (EUR)</option>
+                        <option value="GBP" data-rate="0.80" data-symbol="£">UK (GBP)</option>
+                    </select>
+
+                    <select id="categoryFilter" class="w-1/3 p-3 bg-gray-900 border border-gray-700 rounded-lg text-white appearance-none transition-all duration-300 cursor-pointer">
+                        <option value="All">All Categories</option>
+                        <option value="Apparel">Apparel</option>
+                        <option value="Gear">Gear</option>
+                        <option value="Merch">Merch</option>
+                    </select>
+                    <button onclick="applySearchAndFilter()" class="w-1/3 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300 uppercase tracking-wider">
+                        Search
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dynamic Product Grid - Populated by JavaScript -->
+            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+                <!-- Products will be injected here by JS -->
+            </div>
+
+            <!-- Shop CTA Placeholder -->
+            <div class="text-center mt-24 bg-gray-900 p-10 rounded-xl border-t-4 border-red-600 shadow-2xl">
+                <h2 class="text-4xl font-extrabold mb-4">Looking for something else?</h2>
+                <p class="text-xl text-gray-400 mb-6">Check the **Equipment** page for personal gear recommendations or the **Membership** page for exclusive content.</p>
+                <a href="membership.html" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full transition-colors duration-300 uppercase tracking-wider inline-block shadow-lg">
+                    View Membership
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Cart Panel (Side Menu) -->
+    <div id="cartPanel" class="text-white flex flex-col">
+        <!-- Cart Header -->
+        <div class="p-4 flex justify-between items-center border-b border-gray-700">
+            <h2 class="text-2xl font-bold">Your Cart</h2>
+            <button onclick="hideCart()" class="text-gray-400 hover:text-white transition-colors">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Cart Items List -->
+        <div id="cartItemsContainer" class="p-4 space-y-4">
+            <!-- Cart items will be injected here -->
+            <p id="emptyCartMessage" class="text-gray-500 text-center mt-8">Your cart is empty.</p>
+        </div>
+
+        <!-- Cart Footer (Totals and Checkout) -->
+        <div class="cart-footer">
+            <!-- Coupon Code Section (NEW) -->
+            <div class="mb-4 p-3 bg-gray-800 rounded-lg">
+                <label for="couponInput" class="text-sm font-semibold block mb-2">Have a Coupon Code?</label>
+                <div class="flex space-x-2">
+                    <input type="text" id="couponInput" placeholder="Enter Code" value=""
+                        class="flex-grow p-2 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-red-500 focus:border-red-500 uppercase">
+                    <button onclick="applyCoupon()" id="applyCouponBtn" 
+                        class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 text-sm">
+                        Apply
+                    </button>
+                </div>
+                <p id="couponStatus" class="mt-2 text-xs font-medium"></p>
+            </div>
+            
+            <div class="mb-4">
+                <label for="deliveryCountry" class="text-sm font-semibold block mb-2">Select Delivery Country:</label>
+                <select id="deliveryCountry" onchange="updateCartUI()" class="w-full p-2 bg-gray-900 border border-gray-700 rounded-lg text-white">
+                    <option value="BD">Bangladesh</option>
+                    <option value="Other">Other Countries</option>
+                </select>
+            </div>
+            
+            <div class="space-y-2 border-t border-gray-700 pt-3">
+                <div class="flex justify-between text-gray-400">
+                    <span>Subtotal:</span>
+                    <span id="cartSubtotal">$0.00</span>
+                </div>
+                <!-- Discount Line (NEW) -->
+                <div id="discountLine" class="flex justify-between text-green-400 font-semibold" style="display: none;">
+                    <span>Discount (10%):</span>
+                    <span id="cartDiscount">$0.00</span>
+                </div>
+                <div class="flex justify-between text-gray-400">
+                    <span>Delivery Fee:</span>
+                    <span id="cartDeliveryFee">$0.00</span>
+                </div>
+                <div class="flex justify-between text-xl font-bold text-red-500 border-t border-gray-600 pt-2">
+                    <span>Total:</span>
+                    <span id="cartGrandTotal">$0.00</span>
+                </div>
+            </div>
+            
+            <button onclick="showCheckoutModal()" class="mt-4 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg transition-colors duration-300 uppercase tracking-wider">
+                Confirm Delivery
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Footer Section -->
+    <footer class="bg-black text-white py-12 px-4 border-t border-gray-800">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-col md:flex-row justify-between items-center md:items-start space-y-8 md:space-y-0 md:space-x-8">
+                <!-- Signature/Logo and Description -->
+                <div class="flex flex-col items-center md:items-start text-center md:text-left md:w-1/3">
+                    <img src="https://placehold.co/192x48/000000/ffffff?text=O.S.A+Signature" onerror="this.onerror=null;this.src='https://placehold.co/192x48/000000/ffffff?text=O.S.A+Signature';" alt="Signature" class="mb-4 w-48 h-auto">
+                    <p class="text-gray-400 text-sm">Pioneer bassist from Bangladesh. Official member of Khola Chhad Unlimited. Passionate musician dedicated to performance, composition & creativity.</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="md:w-1/3 text-center md:text-left">
+                    <h4 class="text-xl font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-300 hover:text-white transition-colors duration-300">Home</a></li>
+                        <li><a href="shop.html" class="text-red-500 font-bold transition-colors duration-300">Shop</a></li>
+                        <li><a href="equipment.html" class="text-gray-300 hover:text-white transition-colors duration-300">Equipment</a></li>
+                        <li><a href="membership.html" class="text-gray-300 hover:text-white transition-colors duration-300">Membership</a></li>
+                        <li><a href="biography.html" class="text-gray-300 hover:text-white transition-colors duration-300">About</a></li>
+                        <li><a href="gallery.html" class="text-gray-300 hover:text-white transition-colors duration-300">Gallery</a></li>
+                        <li><a href="bk.html" class="text-gray-300 hover:text-white transition-colors duration-300">Booking</a></li>
+                        <li><a href="Video.html" class="text-gray-300 hover:text-white transition-colors duration-300">Video</a></li>
+                    </ul>
+                </div>
+
+                <!-- Connect / Social Media -->
+                <div class="md:w-1/3 text-center md:text-right">
+                    <h4 class="text-xl font-semibold mb-4">Connect</h4>
+                    <div class="flex justify-center md:justify-end space-x-4 mb-4">
+                        <a href="https://www.facebook.com/oronnosohelaungkon0" class="text-gray-300 hover:text-white transition-colors duration-300 text-2xl"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/oronnosohelaungkon/" class="text-gray-300 hover:text-white transition-colors duration-300 text-2xl"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.youtube.com/@oronnosohelaungkon    " class="text-gray-300 hover:text-white transition-colors duration-300 text-2xl"><i class="fab fa-youtube"></i></a>
+                    </div>
+                    <p class="text-gray-400 text-sm">Follow for the latest updates, new releases, and behind-the-scenes content.</p>
+                </div>
+            </div>
+
+            <hr class="border-gray-700 my-8">
+
+            <!-- Copyright and Developed By -->
+            <div class="flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
+                <p>&copy; 2025 Oronno Sohel Aungkon. All rights reserved.</p>
+                <p>Developed by <span class="text-red-500">&hearts;</span> by O.S.A. Technology</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom Modals -->
+    <!-- Warning Modal -->
+    <div id="warningModal" class="modal hidden">
+        <div class="modal-content max-w-xs">
+            <span class="close-button" onclick="closeModal('warningModal')">&times;</span>
+            <i class="fas fa-exclamation-triangle text-yellow-400 text-3xl mb-2"></i>
+            <p class="text-xl font-bold mb-2">Access Denied!</p>
+            <p class="text-sm">You cannot right-click on this page. Ha Ha!</p>
+        </div>
+    </div>
+
+    <!-- Product Comments Modal -->
+    <div id="commentsModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('commentsModal')">&times;</span>
+            
+            <div class="flex flex-col mb-4">
+                <h3 class="text-3xl font-bold text-red-500" id="commentProductName"></h3>
+                <p class="text-sm font-semibold text-gray-400" id="commentsModalSubtitle"></p>
+            </div>
+            
+            <div id="commentList" class="space-y-4 max-h-80 overflow-y-auto pr-2 mb-6">
+                <!-- Static Comments will be injected here -->
+            </div>
+            
+            <div id="commentInputSection" class="border-t border-gray-700 pt-4">
+                <!-- Input or Lock Message will be injected here by JS -->
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Limited Edition Checkout Modal -->
+    <div id="checkoutModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('checkoutModal')">&times;</span>
+            
+            <div class="text-center p-4">
+                <i class="fas fa-box-open text-6xl text-red-500 mb-4 animate-pulse"></i>
+                <h3 class="text-3xl font-extrabold mb-2 text-white">Limited Edition</h3>
+                <p class="text-lg text-gray-300 mb-4">This is a Limited Edition product. If you are lucky, you can buy it!</p>
+                
+                <div class="bg-gray-800 p-4 rounded-lg mb-6">
+                    <p class="text-2xl font-bold text-red-400 mb-2">Out of Stock!</p>
+                    <p class="text-base text-gray-300">This product is currently out of stock.</p>
+                    <p class="text-base text-yellow-400 font-semibold mt-2">Will be available again: <span class="font-extrabold">2026</span></p>
+                </div>
+
+                <p class="text-gray-400 mb-4">We will notify you via email when stock becomes available.</p>
+                
+                <form onsubmit="submitEmail(event)">
+                    <input type="email" id="notifyEmail" placeholder="Enter your email address" required
+                        class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-red-500 focus:border-red-500 mb-3">
+                    <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg transition-colors duration-300 uppercase tracking-wider">
+                        Sign up for Notification
+                    </button>
+                    <p id="emailStatus" class="mt-3 text-sm font-semibold hidden"></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Tone.js synth for warning sound
+        const synth = new Tone.Synth().toDestination();
+
+        // --- GLOBAL STATE ---
+        let allProducts = [];
+        let cart = [];
+        const VALID_COUPON_CODE = 'ORONNO25';
+        let discountPercentage = 0; // 0 for no discount, 0.10 for 10%
+        let lastAppliedCoupon = ''; // Stores the code that successfully applied the discount
+
+        // --- PRODUCT DATA AND GENERATION LOGIC ---
+
+        // Function to generate product data with random sold count and rating
+        function getProductData() {
+            return [
+                { 
+                    name: "Oronno Cap", 
+                    description: "Premium quality baseball cap, comfortable and stylish.", 
+                    category: "Apparel", 
+                    price: 19.00, 
+                    imageUrl: "https://oronnosohelaungkon.edgeone.app/Gemini_Generated_Image_hyqahphyqahphyqa.png",
+                    hasSizes: false // No size needed for a cap
+                },
+                { 
+                    name: "Oronno Cup (Mug)", 
+                    description: "Branded coffee mug with durable print.", 
+                    category: "Merch", 
+                    price: 12.50, 
+                    imageUrl: "https://loyal-black-lzmx2eosba.edgeone.app/Gemini_Generated_Image_a4uybxa4uybxa4uy.png",
+                    hasSizes: false
+                },
+                { 
+                    name: "Oronno T-Shirt", 
+                    description: "High-quality cotton T-Shirt with exclusive logo.", 
+                    category: "Apparel", 
+                    price: 29.99, 
+                    imageUrl: "https://parental-amethyst-mztjsjlrm6.edgeone.app/Gemini_Generated_Image_uesokouesokoueso.png",
+                    hasSizes: true, // Needs size
+                    availableSizes: ['S', 'M', 'L', 'XL', 'XXL']
+                },
+                { 
+                    name: "Oronno Guitar Pick (10-pack)", 
+                    description: "Set of 10 guitar picks for perfect grip and tone.", 
+                    category: "Gear", 
+                    price: 9.99, 
+                    imageUrl: "https://neighbouring-gray-wcs4kka99a.edgeone.app/Gemini_Generated_Image_oelijsoelijsoeli.png",
+                    hasSizes: false
+                },
+                { 
+                    name: "Oronno Guitar Belt (Strap)", 
+                    description: "Comfortable leather guitar strap, best for stage performance.", 
+                    category: "Gear", 
+                    price: 39.99, 
+                    imageUrl: "https://payable-brown-jutprgxvoa.edgeone.app/Gemini_Generated_Image_r9pqar9pqar9pqar.png",
+                    hasSizes: false
+                },
+                { 
+                    name: "Oronno Guitar Bag", 
+                    description: "Deluxe padded bag for your valuable guitar.", 
+                    category: "Gear", 
+                    price: 85.00, 
+                    imageUrl: "https://precious-yellow-gu74dqex9n.edgeone.app/Gemini_Generated_Image_4wc7uk4wc7uk4wc7.png",
+                    hasSizes: false
+                },
+                { 
+                    name: "Oronno Hoodie", 
+                    description: "Warm, premium hoodie with embroidered logo.", 
+                    category: "Apparel", 
+                    price: 65.00, 
+                    imageUrl: "https://oronnosohelaungkon1.edgeone.app/Gemini_Generated_Image_m0lq20m0lq20m0lq.png",
+                    hasSizes: true, // Needs size
+                    availableSizes: ['S', 'M', 'L', 'XL']
+                },
+                { 
+                    name: "Oronno Sticker Pack", 
+                    description: "Pack of various logo stickers for laptop or instrument.", 
+                    category: "Merch", 
+                    price: 4.99, 
+                    imageUrl: "https://blonde-coral-epwcymumo7.edgeone.app/Gemini_Generated_Image_acskmmacskmmacsk.png",
+                    hasSizes: false
+                }
+            ].map(product => ({
+                ...product,
+                // Assign random sold count and rating for display purposes
+                sold: Math.floor(Math.random() * 50) + 15, 
+                rating: (Math.random() * (5.0 - 4.0) + 4.0).toFixed(1)
+            }));
+        }
+
+        // --- UNIQUE COMMENT DATA ---
+        const productComments = { 
+            "Oronno Cap": [
+                { user: "Rana M.", rating: 5, text: "Very comfortable for winter use. The design is great, perfectly matching Oronno's style."},
+                { user: "Shanta K.", rating: 4.5, text: "Great fit and quality material. Slightly expensive but worth it for the brand."},
+                { user: "Abir H.", rating: 5, text: "An amazing cap to add to my collection. The finishing is very good."},
+            ],
+            "Oronno Cup (Mug)": [
+                { user: "Jubair H.", rating: 5, text: "My new favorite coffee mug! The print is durable and hasn't faded after many washes."},
+                { user: "Nusrat J.", rating: 4, text: "Very sturdy mug. Enjoy drinking morning tea from it. Wish the delivery was a bit faster."},
+                { user: "Tanim S.", rating: 5, text: "The perfect size for my morning brew. Highly recommend this for fans."},
+            ],
+            "Oronno T-Shirt": [
+                { user: "Fahim R.", rating: 5, text: "The fabric is soft and the fit is perfect. The logo print is high quality."},
+                { user: "Pavel S.", rating: 4, text: "Good material, but it shrank slightly after the first wash. Order one size up."},
+                { user: "Anika L.", rating: 5, text: "Love the design! Very comfortable for casual wear."},
+            ],
+            "Oronno Guitar Pick (10-pack)": [
+                { user: "Shanto K.", rating: 5, text: "Perfect grip and excellent thickness for both acoustic and electric. A must-buy for guitarists."},
+                { user: "Raisa I.", rating: 4.5, text: "These picks are high quality. They improve my playing speed noticeably. Good value for money."},
+                { user: "Nayeem H.", rating: 5, text: "Best picks I've ever used. The texture prevents slipping during aggressive playing."},
+            ],
+            "Oronno Guitar Belt (Strap)": [
+                { user: "Zahid B.", rating: 5, text: "The leather is super comfortable, even during long gigs. The red stitching is a nice touch. Totally recommend for bass players!"},
+                { user: "Nizam U.", rating: 4, text: "The strap is very wide and strong. Best for stage performance. Thought the price was a little high."},
+                { user: "Rony A.", rating: 5, text: "Unbelievably good support for my heavy bass. No more shoulder pain."},
+            ],
+            "Oronno Guitar Bag": [
+                { user: "Sadia P.", rating: 5, text: "Deluxe protection! My guitar fits snugly, and the padding is thick. Worth every penny for safety."},
+                { user: "Imran T.", rating: 4.5, text: "Excellent guitar bag. Plenty of space in the inner pockets. Perfect for my favorite guitar."},
+                { user: "Bahar Z.", rating: 5, text: "Excellent storage space for cables and pedals. Very happy with the purchase."},
+            ],
+            "Oronno Hoodie": [
+                { user: "Sumi V.", rating: 5, text: "Super warm and cozy! The embroidery is top-notch. Perfect for cold studio nights."},
+                { user: "Hasan G.", rating: 4, text: "High quality material, but the fit is a bit snug for an XL. Still great though."},
+                { user: "Kajal P.", rating: 5, text: "Favorite piece of merch! Looks professional and feels premium."},
+            ],
+            "Oronno Sticker Pack": [
+                { user: "Afrin H.", rating: 5, text: "Cool designs! I stuck them on my laptop and instrument case. They are good quality vinyl."},
+                { user: "Taimur V.", rating: 4, text: "The stickers are very nice, but I was hoping for more variety. "},
+                { user: "Sakib A.", rating: 5, text: "They look professional and the adhesive is very strong."},
+            ]
+        };
+
+        // Function to generate the star HTML based on rating (for display in product card)
+        function getStarsHTML(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= Math.floor(rating)) {
+                    stars += '<i class="fas fa-star text-yellow-400"></i>'; // Full star
+                } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
+                    stars += '<i class="fas fa-star-half-alt text-yellow-400"></i>'; // Half star
+                } else {
+                    stars += '<i class="far fa-star text-gray-600"></i>'; // Empty star
+                }
+            }
+            return stars;
+        }
+
+        // Function to generate star HTML specifically for comments
+        function getStarsHTMLforComment(rating) {
+            let stars = '';
+            const floorRating = Math.floor(rating);
+            const hasHalf = rating % 1 !== 0;
+
+            for (let i = 1; i <= 5; i++) {
+                if (i <= floorRating) {
+                    stars += '<i class="fas fa-star"></i>'; // Full star
+                } else if (i === floorRating + 1 && hasHalf) {
+                    stars += '<i class="fas fa-star-half-alt"></i>'; // Half star
+                } else {
+                    stars += '<i class="far fa-star"></i>'; // Empty star
+                }
+            }
+            return `<div class="text-yellow-400 text-sm mb-2">${stars} <span class="text-gray-400 text-xs ml-1">(${rating})</span></div>`;
+        }
+
+
+        // Function to get the current currency details
+        function getCurrencyDetails() {
+            const countrySelect = document.getElementById('countrySelect');
+            const selectedOption = countrySelect.options[countrySelect.selectedIndex];
+            return {
+                rate: parseFloat(selectedOption.getAttribute('data-rate')) || 1.0,
+                symbol: selectedOption.getAttribute('data-symbol') || '$',
+                code: countrySelect.value
+            };
+        }
+
+        // Function to generate HTML for a single product card
+        function createProductCard(product, currency) {
+            const convertedPrice = (product.price * currency.rate).toFixed(2);
+            const sanitizedProductName = product.name.replace(/\s/g, '-');
+
+            // Conditional Size Selector HTML
+            const sizeSelectHtml = product.hasSizes ? `
+                <div class="mb-4">
+                    <label for="size-${sanitizedProductName}" class="block text-sm font-medium text-gray-400 mb-1">Select Size:</label>
+                    <select id="size-${sanitizedProductName}" 
+                        class="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-red-500 focus:border-red-500 transition-all duration-300">
+                        ${product.availableSizes.map(size => `<option value="${size}">${size}</option>`).join('')}
+                    </select>
+                </div>
+            ` : '';
+
+
+            return `
+                <div class="bg-gray-900 rounded-xl shadow-2xl overflow-hidden transform hover:scale-[1.02] transition-all duration-300 border border-gray-800 product-card" 
+                    data-name="${product.name}" 
+                    data-category="${product.category.toLowerCase()}" 
+                    data-price="${product.price}">
+                    
+                    <img src="${product.imageUrl}" 
+                        alt="${product.name}" class="w-full h-64 object-cover transition-opacity duration-300 hover:opacity-80"
+                        onerror="this.onerror=null;this.src='https://placehold.co/600x400/333/fff?text=Image+Unavailable';">
+                    
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-1 text-white">${product.name}</h3>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-sm text-red-500 font-semibold uppercase tracking-wider">${product.category}</span>
+                            <span class="text-sm text-gray-400 font-semibold"><i class="fas fa-fire text-orange-400 mr-1"></i> ${product.sold} Sold</span>
+                        </div>
+
+                        <div class="flex items-center space-x-2 mb-4">
+                            <div class="text-lg">
+                                ${getStarsHTML(product.rating)}
+                            </div>
+                            <span class="text-sm text-gray-300">(${product.rating})</span>
+                        </div>
+
+                        <p class="text-gray-400 text-sm mb-4">${product.description}</p>
+                        
+                        ${sizeSelectHtml}
+                        
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-3xl font-extrabold text-red-500">${currency.symbol}${convertedPrice}</span>
+                            <button onclick="showCommentsModal('${product.name}')" 
+                                    class="text-sm text-blue-400 hover:text-blue-500 transition-colors duration-300 font-medium">
+                                View Comments
+                            </button>
+                        </div>
+
+                        <!-- ADD TO CART BUTTON -->
+                        <button onclick="addToCart('${product.name}')" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300 uppercase tracking-wider shadow-lg">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to render the products based on filters
+        function renderProducts(products, currency) {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = products.map(product => createProductCard(product, currency)).join('');
+        }
+
+        // Function to apply search and filter (and currency changes)
+        function applySearchAndFilter() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const category = document.getElementById('categoryFilter').value;
+            const currency = getCurrencyDetails();
+            
+            const filteredProducts = allProducts.filter(product => {
+                const matchesSearch = product.name.toLowerCase().includes(searchText) || product.description.toLowerCase().includes(searchText);
+                const matchesCategory = category === 'All' || product.category === category;
+                
+                return matchesSearch && matchesCategory;
+            });
+
+            renderProducts(filteredProducts, currency);
+            // Also update the cart UI to reflect the new currency
+            updateCartUI(); 
+        }
+
+        // --- CART LOGIC ---
+
+        function addToCart(productName) {
+            const product = allProducts.find(p => p.name === productName);
+            if (!product) return;
+
+            // FIX: Set default size to empty string ('') instead of null for consistency
+            let selectedSize = ''; 
+            
+            if (product.hasSizes) {
+                const sizeSelectId = `size-${productName.replace(/\s/g, '-')}`;
+                const sizeSelect = document.getElementById(sizeSelectId);
+                // Ensure size is read from the select, default to empty string if missing
+                selectedSize = sizeSelect ? sizeSelect.value : ''; 
+            }
+
+            // Look for an existing item with the SAME name AND size
+            const existingItem = cart.find(item => item.name === productName && item.size === selectedSize);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                // Add new item with quantity 1 and the determined size ('' or 'S'/'M' etc.)
+                cart.push({ ...product, quantity: 1, size: selectedSize });
+            }
+
+            // Play a subtle sound on add to cart
+            synth.triggerAttackRelease("C5", "8n"); 
+
+            updateCartUI();
+        }
+
+        function removeFromCart(productName, size) {
+            // Remove item based on both name and size. Size will now be a string ('' for no size).
+            cart = cart.filter(item => !(item.name === productName && item.size === size));
+            updateCartUI();
+        }
+
+        function updateQuantity(productName, size, delta) {
+            // Find item based on both name and size. Size will now be a string ('' for no size).
+            const item = cart.find(item => item.name === productName && item.size === size);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) {
+                    removeFromCart(productName, size);
+                } else {
+                    updateCartUI();
+                }
+            }
+        }
+
+        // Coupon application logic
+        function applyCoupon() {
+            const couponInput = document.getElementById('couponInput');
+            const couponStatus = document.getElementById('couponStatus');
+            const code = couponInput.value.trim().toUpperCase();
+
+            // Clear previous status
+            couponStatus.textContent = '';
+            couponStatus.className = 'mt-2 text-xs font-medium';
+            
+            if (code === VALID_COUPON_CODE) {
+                discountPercentage = 0.10; // 10% discount
+                lastAppliedCoupon = code;
+                couponStatus.textContent = `Congratulation! Apni 'ORONNO25' byabohar korechen, ar tai 10% discount peye geche! Bhalo shopping hok.`;
+                couponStatus.classList.add('text-green-500');
+            } else if (code === '') {
+                // If input is cleared and button is pressed
+                if (discountPercentage > 0) {
+                    discountPercentage = 0;
+                    lastAppliedCoupon = '';
+                    couponStatus.textContent = `Coupon removed.`;
+                    couponStatus.classList.add('text-yellow-500');
+                } else {
+                    couponStatus.textContent = 'Please enter a coupon code.';
+                    couponStatus.classList.add('text-gray-400');
+                }
+            } else {
+                discountPercentage = 0;
+                lastAppliedCoupon = '';
+                couponStatus.textContent = `Invalid coupon code: '${code}'.`;
+                couponStatus.classList.add('text-red-500');
+            }
+
+            // Force update UI to reflect discount/removal
+            updateCartUI();
+        }
+        
+        // Main function to update the cart display and totals
+        function updateCartUI() {
+            const container = document.getElementById('cartItemsContainer');
+            const cartCount = document.getElementById('cartCount');
+            const currency = getCurrencyDetails(); // Use product currency for conversion
+
+            // 1. Update Cart Count Indicator
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            cartCount.classList.toggle('opacity-0', totalItems === 0);
+            
+            // 2. Calculate Totals (in USD first, then convert)
+            let subtotalUSD = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            
+            // Calculate Discount
+            const discountAmountUSD = subtotalUSD * discountPercentage;
+            let discountedSubtotalUSD = subtotalUSD - discountAmountUSD;
+
+            // 3. Determine Delivery Fee (Fixed USD value)
+            const deliveryCountryCode = document.getElementById('deliveryCountry').value;
+            const deliveryFeeUSD = deliveryCountryCode === 'BD' ? 1.49 : 5.00;
+            
+            // 4. Convert Totals to Selected Currency
+            const subtotal = subtotalUSD * currency.rate;
+            const discountAmount = discountAmountUSD * currency.rate;
+            const deliveryFee = deliveryFeeUSD * currency.rate;
+            const grandTotal = (discountedSubtotalUSD * currency.rate) + deliveryFee; // Use discounted USD subtotal for final conversion
+
+            // 5. Update Totals in Footer
+            document.getElementById('cartSubtotal').textContent = `${currency.symbol}${subtotal.toFixed(2)}`;
+            
+            // Update Discount Line visibility and value
+            const discountLine = document.getElementById('discountLine');
+            const cartDiscount = document.getElementById('cartDiscount');
+            
+            if (discountPercentage > 0) {
+                discountLine.style.display = 'flex';
+                cartDiscount.textContent = `-${currency.symbol}${discountAmount.toFixed(2)}`;
+            } else {
+                discountLine.style.display = 'none';
+            }
+
+            document.getElementById('cartDeliveryFee').textContent = `${currency.symbol}${deliveryFee.toFixed(2)}`;
+            document.getElementById('cartGrandTotal').textContent = `${currency.symbol}${grandTotal.toFixed(2)}`;
+
+            // 6. Render Cart Items
+            if (cart.length === 0) {
+                container.innerHTML = `<p id="emptyCartMessage" class="text-gray-500 text-center mt-8">Your cart is empty.</p>`;
+                // Remove coupon if cart becomes empty
+                if (discountPercentage > 0) {
+                    discountPercentage = 0;
+                    lastAppliedCoupon = '';
+                    document.getElementById('couponInput').value = '';
+                    // Updated message for coupon removed due to empty cart
+                    document.getElementById('couponStatus').textContent = 'Coupon ti remove kora holo, karon apnar cart empty.';
+                    document.getElementById('couponStatus').classList.add('text-yellow-500');
+                }
+            } else {
+                container.innerHTML = cart.map(item => `
+                    <div class="flex items-center space-x-4 p-3 bg-gray-900 rounded-lg shadow-md">
+                        <img src="${item.imageUrl}" alt="${item.name}" class="w-12 h-12 object-cover rounded-md" onerror="this.onerror=null;this.src='https://placehold.co/48x48/555/fff?text=P';">
+                        <div class="flex-grow">
+                            <h4 class="text-sm font-semibold">${item.name}</h4>
+                            <!-- Display size only if it's not the default empty string '' -->
+                            ${item.size ? `<p class="text-xs text-gray-500">Size: ${item.size}</p>` : ''} 
+                            <p class="text-red-500 font-bold">${currency.symbol}${(item.price * currency.rate * item.quantity).toFixed(2)}</p>
+                        </div>
+                        <div class="flex items-center space-x-2 text-sm">
+                            <!-- Pass item.size (which is now a string: '' or 'S') to updateQuantity -->
+                            <button onclick="updateQuantity('${item.name}', '${item.size}', -1)" class="w-6 h-6 bg-gray-700 hover:bg-gray-600 rounded-full transition-colors">-</button>
+                            <span class="font-bold w-4 text-center">${item.quantity}</span>
+                            <button onclick="updateQuantity('${item.name}', '${item.size}', 1)" class="w-6 h-6 bg-gray-700 hover:bg-gray-600 rounded-full transition-colors">+</button>
+                        </div>
+                        <!-- Pass item.size (which is now a string: '' or 'S') to removeFromCart -->
+                        <button onclick="removeFromCart('${item.name}', '${item.size}')" class="text-gray-500 hover:text-red-500 transition-colors">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        function toggleCart() {
+            const cartPanel = document.getElementById('cartPanel');
+            cartPanel.classList.toggle('open');
+            // Ensure cart UI is updated whenever it's opened
+            if (cartPanel.classList.contains('open')) {
+                // If a coupon was applied, ensure the input field shows it when cart opens
+                if (lastAppliedCoupon) {
+                    document.getElementById('couponInput').value = lastAppliedCoupon;
+                    // Updated recurring status message
+                    document.getElementById('couponStatus').textContent = `Obhinondon! 10% discount active ('${lastAppliedCoupon}' byabohar kora hoyeche).`;
+                    document.getElementById('couponStatus').classList.add('text-green-500');
+                } else {
+                    document.getElementById('couponInput').value = '';
+                    document.getElementById('couponStatus').textContent = '';
+                }
+                updateCartUI();
+            }
+        }
+        
+        function hideCart() {
+            document.getElementById('cartPanel').classList.remove('open');
+        }
+
+        // --- CHECKOUT/LIMITED EDITION LOGIC ---
+        function showCheckoutModal() {
+            if (cart.length === 0) {
+                // Display warning modal for empty cart
+                document.getElementById('warningModal').querySelector('.modal-content p:last-child').innerText = 'Please add products to your cart before confirming delivery.';
+                document.getElementById('warningModal').querySelector('.modal-content p:first-child').innerText = 'Cart Empty!';
+                showModal('warningModal');
+                return;
+            }
+            // Show the special limited edition message modal
+            showModal('checkoutModal');
+            document.getElementById('emailStatus').classList.add('hidden');
+        }
+
+        function submitEmail(event) {
+            event.preventDefault();
+            const emailInput = document.getElementById('notifyEmail');
+            const statusMessage = document.getElementById('emailStatus');
+            
+            // Basic email validation (for demonstration)
+            if (!emailInput.value || !emailInput.value.includes('@')) {
+                statusMessage.textContent = "Please provide a valid email address.";
+                statusMessage.classList.remove('text-green-500', 'hidden');
+                statusMessage.classList.add('text-red-500');
+                return;
+            }
+
+            // Simulate submission success
+            statusMessage.textContent = `Thank you, ${emailInput.value}! You will be notified in 2026 when stock arrives.`;
+            statusMessage.classList.remove('text-red-500', 'hidden');
+            statusMessage.classList.add('text-green-500');
+            emailInput.value = ''; // Clear input
+
+            // In a real app, you would send this email to a backend service.
+        }
+
+
+        // --- GENERAL MODAL AND UTILITY FUNCTIONS ---
+        
+        function toggleMenu() {
+            const menu = document.querySelector('.md\\:hidden.navbar-menu');
+            const menuIsActive = menu.style.display === 'flex';
+            
+            if (menuIsActive) {
+                menu.style.display = 'none';
+            } else {
+                menu.style.display = 'flex';
+                synth.triggerAttackRelease("G4", "16n");
+            }
+        }
+
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            synth.triggerAttackRelease("C4", "8n");
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+        
+        // Returns the HTML for the static (fake) comments based on product name.
+        function getStaticCommentsHTML(productName) {
+            const comments = productComments[productName] || [];
+            if (comments.length === 0) {
+                return `<div class="p-4 text-center text-gray-500"><p class="font-medium">No comments yet for this product.</p></div>`;
+            }
+
+            return comments.map(comment => `
+                <div class="bg-gray-800 p-4 rounded-lg border-l-4 border-red-500">
+                    <div class="flex justify-between items-start">
+                        <p class="font-semibold text-white">${comment.user}</p>
+                    </div>
+                    ${getStarsHTMLforComment(comment.rating)}
+                    <p class="text-gray-300 text-sm">${comment.text}</p>
+                </div>
+            `).join('');
+        }
+
+        // Populates and shows the comments modal
+        function showCommentsModal(productName) {
+            const comments = productComments[productName] || [];
+            const commentCount = comments.length;
+            
+            document.getElementById('commentProductName').innerText = productName;
+            document.getElementById('commentsModalSubtitle').textContent = `${commentCount} Comments`; 
+            
+            // 1. Always show the unique static comments for the selected product
+            document.getElementById('commentList').innerHTML = getStaticCommentsHTML(productName);
+            
+            // 2. Control the "Write Comment" section based on purchase status (SIMULATION)
+            const hasPurchasedItem = false; 
+            const commentInputSection = document.getElementById('commentInputSection');
+
+            if (hasPurchasedItem) {
+                commentInputSection.innerHTML = `
+                    <h4 class="text-xl font-bold text-white mb-3">Write Your Review</h4>
+                    <textarea rows="3" placeholder="Write your honest review here..." 
+                        class="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-red-500 focus:border-red-500 resize-none mb-3"></textarea>
+                    <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 shadow-md">
+                        Submit
+                    </button>
+                `;
+            } else {
+                commentInputSection.innerHTML = `
+                    <div class="flex flex-col items-center justify-center p-6 bg-gray-800 rounded-xl border-2 border-red-700 shadow-inner">
+                        <svg class="w-10 h-10 mb-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                        <h4 class="text-xl font-bold mb-1 text-red-500">Access Denied to Review</h4>
+                        <p class="text-sm font-medium text-gray-300 text-center">Please purchase the product to submit a review.</p>
+                    </div>
+                `;
+            }
+            
+            showModal('commentsModal');
+        }
+
+
+        // --- INITIALIZATION ---
+        window.onload = function() {
+            // Start Tone context for sound effects
+            if (Tone.context.state !== 'running') {
+                Tone.start();
+            }
+            
+            allProducts = getProductData(); // Load product data
+
+            // Initial render of products and cart
+            applySearchAndFilter(); 
+            updateCartUI(); 
+
+            // Attach event listeners for search input, category selection, AND country selection
+            document.getElementById('searchInput').addEventListener('input', applySearchAndFilter);
+            document.getElementById('categoryFilter').addEventListener('change', applySearchAndFilter);
+            document.getElementById('countrySelect').addEventListener('change', applySearchAndFilter); 
+
+            // New: Ensure coupon input also triggers apply function on Enter key press
+            document.getElementById('couponInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    applyCoupon();
+                }
+            });
+        };
+
+
+        // Disable right-click and show warning
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            // Reset warning modal content
+            document.getElementById('warningModal').querySelector('.modal-content p:last-child').innerText = 'You cannot right-click on this page. Ha Ha!';
+            document.getElementById('warningModal').querySelector('.modal-content p:first-child').innerText = 'Access Denied!';
+            showModal('warningModal');
+        });
+
+        // Close modal if clicked outside content
+        window.addEventListener('click', function(event) {
+            const warningModal = document.getElementById('warningModal');
+            const commentsModal = document.getElementById('commentsModal');
+            const checkoutModal = document.getElementById('checkoutModal');
+            const cartPanel = document.getElementById('cartPanel');
+
+            if (event.target == warningModal) {
+                closeModal('warningModal');
+            }
+            if (event.target == commentsModal) {
+                closeModal('commentsModal');
+            }
+            if (event.target == checkoutModal) {
+                closeModal('checkoutModal');
+            }
+            // Close cart if click is outside the panel and the toggle button
+            if (cartPanel.classList.contains('open') && !cartPanel.contains(event.target) && !event.target.closest('.navbar-social button')) {
+                hideCart();
+            }
+        });
+    </script>
+</body>
+</html>

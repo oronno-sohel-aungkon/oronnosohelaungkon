@@ -1,752 +1,390 @@
 <!DOCTYPE html>
-<html lang="en" class="dark"> <!-- Default to dark mode -->
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oronno Sohel Aungkon - Gallery</title>
+    <title>Oronno Sohel Aungkon | Gallery</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts - Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for social icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Tone.js for sound effects -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
-
+    
     <style>
-        /* Universal box-sizing for consistent model */
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
-
-        /* Ensure html and body have no default margins/paddings */
-        html, body {
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Base styles for the entire page, matching the new design's dark background */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #000; /* Solid black background */
-            color: #e2e8f0; /* Light text for dark background */
-            line-height: 1.6;
-            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+            background-color: #000;
+            padding-top: 64px; /* Space for the fixed navbar */
         }
-
-        /* Dark mode styles - applied when 'dark' class is on html element */
-        html.dark body {
-            background-color: #1a202c; /* Slightly less black for dark mode body */
-            color: #e2e8f0; /* Light text */
+        
+        /* Navbar Styles */
+        .navbar {
+            transition: background-color 0.3s ease;
         }
-
-        /* Ensure text and border colors adapt for sections within the main content */
-        html.dark .text-gray-800 {
-            color: #e2e8f0; /* Lighter headings */
-        }
-
-        html.dark .text-gray-700 {
-            color: #cbd5e0; /* Lighter body text */
-        }
-
-        html.dark .border-gray-200 {
-            border-color: #4a5568; /* Darker border for sections */
-        }
-
-        /* Custom scrollbar for a cleaner look */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-        html.dark ::-webkit-scrollbar-track {
-            background: #2d3748;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 10px;
-        }
-        html.dark ::-webkit-scrollbar-thumb {
-            background: #6b7280;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-        html.dark ::-webkit-scrollbar-thumb:hover {
-            background: #4a5568;
-        }
-
-        /* Fixed navigation bar */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000; /* Ensure nav is on top of other content */
-            background-color: #000; /* Ensure nav background is black */
-        }
-
-        /* Nav link hover effect */
         .nav-link {
-            transition: color 0.3s ease;
+            transition: color 0.3s ease, border-bottom 0.3s ease;
+            position: relative;
+            padding-bottom: 5px;
+            color: #ccc;
         }
-        .nav-link:hover {
-            color: #FFD700; /* Gold color on hover */
+        .nav-link:hover:not(.text-red-500) {
+            color: #FF0000;
         }
-
-        /* Mobile navigation menu */
+        /* Link underline effect on hover */
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: #FF0000;
+            transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+        }
+        .nav-link:hover::after:not(.text-red-500::after) {
+            width: 100%;
+            left: 0;
+        }
+        
+        /* Responsive Navbar - Using 'is-active' class for JS toggle */
         @media (max-width: 768px) {
-            #mobile-menu-container {
-                display: none; /* Hidden by default on mobile */
+            .navbar-menu { display: none; }
+            .navbar-social { display: none; }
+            .navbar-toggle { display: block; }
+            /* This class is toggled by JavaScript */
+            .navbar-menu.is-active {
+                display: flex;
                 flex-direction: column;
-                position: absolute;
-                top: 64px; /* Height of navbar */
+                position: fixed;
+                top: 64px;
                 left: 0;
                 width: 100%;
-                background-color: rgba(0, 0, 0, 0.9);
+                background-color: rgba(0, 0, 0, 0.98);
                 padding: 1rem 0;
                 border-top: 1px solid rgba(255, 255, 255, 0.2);
+                z-index: 50;
+                height: calc(100vh - 64px);
+                overflow-y: auto;
             }
-            #mobile-menu-container.active {
-                display: flex; /* Show when active */
-            }
-            #mobile-menu-container.active .navbar-menu,
-            #mobile-menu-container.active .navbar-social {
-                display: flex; /* Ensure inner elements are visible */
-                flex-direction: column; /* Stack vertically */
-                align-items: center; /* Center items */
-                padding: 0.5rem 1rem;
-            }
-            #mobile-menu-container.active .navbar-social {
-                margin-top: 1rem; /* Add space between nav links and social icons */
-            }
-            .navbar-toggle {
-                display: block; /* Show toggle button */
+            .navbar-menu.is-active a {
+                padding: 1rem 1rem;
+                text-align: center;
+                border-bottom: 1px solid #1a1a1a;
+                font-weight: 600;
             }
         }
 
-        /* Styles for the custom warning modal */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1000; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
-            justify-content: flex-start; /* Align to start (left) */
-            align-items: flex-start; /* Align to start (top) */
-            padding: 1rem; /* Add some padding around the modal */
-        }
-        .modal.flex { /* Only display flex when active */
-             display: flex;
-        }
-        .modal-content {
-            background-color: #1a1a1a;
-            padding: 1.5rem; /* Reduced padding for smaller size */
-            border-radius: 0.75rem; /* rounded-xl */
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3); /* shadow-xl */
-            width: 90%;
-            max-width: 300px; /* Smaller max-width */
-            text-align: left; /* Align text to left */
-            color: white;
-            position: relative;
-            top: 1rem;
-            left: 1rem;
-        }
-        .close-button {
-            position: absolute;
-            top: 0.5rem; /* Adjusted for smaller padding */
-            right: 0.5rem; /* Adjusted for smaller padding */
-            color: #aaa;
-            font-size: 1.2rem; /* Slightly smaller close button */
-            font-weight: bold;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-        .close-button:hover,
-        .close-button:focus {
-            color: #fff;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        /* Styles for the new full-screen image modal (lightbox) */
-        #imageModal {
-            display: none; /* Hidden by default */
-            position: fixed;
-            z-index: 2000; /* Higher than other modals */
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.9); /* Darker overlay */
-            align-items: center;
-            justify-content: center;
-        }
-
-        #imageModal.flex {
-            display: flex;
-        }
-
-        #imageModalContent {
-            position: relative;
-            max-width: 90%;
-            max-height: 90%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #modalImage {
-            max-width: 100%;
-            max-height: 80vh; /* Limit image height to prevent overflow */
-            object-fit: contain; /* Ensure image fits within bounds */
-            border-radius: 0.5rem;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-        }
-
-        #modalCaption {
-            color: white;
-            text-align: center;
-            margin-top: 1rem;
-            font-size: 1.125rem;
-            font-weight: 600;
-        }
-
-        .modal-nav-button {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            padding: 0.75rem 1rem;
-            cursor: pointer;
-            border-radius: 9999px; /* Full rounded */
-            font-size: 1.5rem;
-            transition: background-color 0.3s ease;
-            z-index: 2001; /* Ensure buttons are above image */
-        }
-
-        .modal-nav-button:hover {
-            background-color: rgba(255, 255, 255, 0.4);
-        }
-
-        #imageModalClose {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            color: white;
-            font-size: 2rem;
-            cursor: pointer;
-            transition: color 0.3s ease;
-            z-index: 2001;
-        }
-
-        #imageModalClose:hover {
-            color: #FFD700;
-        }
-
-        /* Custom Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Apply page load animation to main content */
-        .main-content-area {
-            animation: fadeIn 1s ease-out forwards;
-        }
-
-        /* Gallery item hover animation */
+        /* Gallery Item Styling for Hover Effect */
         .gallery-item {
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .gallery-item:hover {
-            transform: scale(1.05) rotate(1deg); /* Slight scale and rotate */
-            box-shadow: 0 15px 25px rgba(255, 215, 0, 0.3); /* Gold shadow */
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(255, 0, 0, 0.5), 0 8px 10px -6px rgba(255, 0, 0, 0.2);
         }
 
-        /* Button hover animation */
-        #viewAllButton {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
         }
 
-        #viewAllButton:hover {
+        .gallery-item:hover .gallery-image {
             transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5); /* Gold shadow */
         }
 
-        /* Nav link hover animation (already present, but ensure smooth) */
-        .nav-link {
-            transition: color 0.3s ease, transform 0.2s ease;
-        }
-        .nav-link:hover {
-            color: #FFD700;
-            transform: translateY(-2px); /* Slight lift */
-        }
-
-        /* Rainbow text animation for logo */
-        .rainbow-text {
-            background: linear-gradient(to right,
-                #ff0000, /* Red */
-                #ff7f00, /* Orange */
-                #ffff00, /* Yellow */
-                #00ff00, /* Green */
-                #0000ff, /* Blue */
-                #4b0082, /* Indigo */
-                #9400d3  /* Violet */
-            );
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-size: 200% auto; /* Make background larger to animate */
-            animation: rainbow-flow 8s linear infinite; /* Adjust duration for speed */
-            display: inline-block; /* Required for background-clip to work */
-        }
-
-        @keyframes rainbow-flow {
-            to {
-                background-position: 200% center; /* Animate background position */
-            }
-        }
-
-        /* Masonry-like grid for images */
-        #galleryGrid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsive columns */
-            gap: 1rem; /* Gap between items */
-        }
-
-        .gallery-item {
-            position: relative;
-            overflow: hidden;
-            border-radius: 0.75rem; /* rounded-lg */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow-lg */
-            /* Fixed aspect ratio for all items */
-            padding-bottom: 75%; /* 4:3 aspect ratio */
-            height: 0; /* Important for padding-bottom to work as aspect ratio hack */
-        }
-
-        .gallery-item .image-content {
+        .image-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Ensures image covers the area without distortion */
-            display: block;
-        }
-
-        /* Overlay for "View" text */
-        .gallery-item .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            items-align: center;
-            justify-content: center;
-            opacity: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 50%);
+            opacity: 1;
             transition: opacity 0.3s ease;
         }
+        
+        .gallery-item:hover .image-overlay {
+            opacity: 0;
+        }
 
-        .gallery-item:hover .overlay {
+        .image-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            padding: 1.5rem;
+            color: white;
             opacity: 1;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .gallery-item:hover .image-caption {
+            opacity: 0;
+            transform: translateY(10px);
         }
     </style>
 </head>
 <body>
 
-    <!-- Navigation Bar -->
-    <nav class="relative z-20 w-full bg-black text-white p-4 shadow-lg">
-        <div class="flex justify-between items-center w-full px-4">
+    <!-- NAV BAR START -->
+    <nav class="fixed top-0 left-0 z-50 w-full bg-black/90 backdrop-blur-sm text-white p-4 border-b border-gray-800 navbar">
+        <div class="container mx-auto flex justify-between items-center max-w-6xl">
             <!-- Logo -->
             <div class="flex items-center space-x-2">
-                <!-- SVG for Musico logo -->
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 16H8V8H10V16ZM14 16H12V8H14V16ZM18 16H16V8H18V16Z" fill="white"/>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-red-500">
+                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 16H8V8H10V16ZM14 16H12V8H14V16ZM18 16H16V8H18V16Z" fill="currentColor"/>
                 </svg>
-                <!-- Updated text and added rainbow-text class -->
-                <span class="text-2xl font-bold rainbow-text">Oronno Sohel Aungkon</span>
+                <span class="text-2xl font-bold"><span class="text-lg font-normal text-red-500">Oronno Sohel Aungkon</span></span>
             </div>
 
-            <!-- Mobile Navigation Toggle -->
-            <div class="md:hidden">
-                <button id="nav-toggle" class="navbar-toggle flex items-center px-3 py-2 border rounded text-gray-200 border-gray-400 hover:text-white hover:border-white">
-                    <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
-                </button>
+            <!-- Navigation Links (Desktop) - 'Gallery' is active -->
+            <div id="desktop-menu" class="hidden md:flex space-x-6 navbar-menu flex-grow justify-center uppercase font-semibold text-sm tracking-wider">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="shop.html" class="nav-link">Shop</a>
+                <a href="equipment.html" class="nav-link">Equipment</a>
+                <a href="membership.html" class="nav-link">Membership</a>
+                <a href="biography.html" class="nav-link">About</a>
+                <a href="gallery.html" class="nav-link text-red-500">Gallery</a> <!-- ACTIVE LINK -->
+                <a href="bk.html" class="nav-link">Booking</a>
+                <a href="Video.html" class="nav-link">Video</a>
             </div>
 
-            <!-- Navigation Links and Social Icons (wrapped for mobile toggle) -->
-            <div id="mobile-menu-container" class="hidden md:flex md:flex-row md:items-center md:space-x-6 flex-grow justify-center">
-                <div class="flex space-x-6 navbar-menu flex-grow justify-center">
-                    <a href="index.html" class="nav-link">Home</a>
-                    <a href="biography.html" class="nav-link">About</a>
-                    <a href="gallery.html" class="nav-link">Gallery</a>
-                    <a href="bk.html" class="nav-link">Booking</a>
-                    <a href="Video.html" class="nav-link">Video</a>
-                </div>
-                <div class="flex space-x-4 navbar-social">
-                    <a href="https://www.facebook.com/oronnosohelaungkon0" target="_blank" class="text-white hover:text-gray-400"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://www.instagram.com/oronnosohelaungkon/" target="_blank" class="text-white hover:text-gray-400"><i class="fab fa-instagram"></i></a>
-                </div>
+            <!-- Social Icons (Desktop) -->
+            <div class="hidden md:flex space-x-4 navbar-social">
+                <a href="https://www.facebook.com/oronnosohelaungkon0" class="text-gray-400 hover:text-red-500 transition-colors duration-300"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/oronnosohelaungkon/" class="text-gray-400 hover:text-red-500 transition-colors duration-300"><i class="fab fa-instagram"></i></a>
             </div>
+
+            <!-- Mobile menu toggle -->
+            <button class="md:hidden text-white focus:outline-none navbar-toggle" onclick="toggleMenu()">
+                <i id="menu-icon" class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Dropdown Links - 'Gallery' is active -->
+        <div id="mobile-menu" class="md:hidden navbar-menu absolute top-full left-0 w-full bg-black/95 flex-col transition-all duration-300 shadow-xl">
+            <a href="index.html" class="nav-link block text-center py-3 px-4 uppercase">Home</a>
+            <a href="shop.html" class="nav-link block text-center py-3 px-4 uppercase">Shop</a>
+            <a href="equipment.html" class="nav-link block text-center py-3 px-4 uppercase">Equipment</a>
+            <a href="membership.html" class="nav-link block text-center py-3 px-4 uppercase">Membership</a>
+            <a href="biography.html" class="nav-link block text-center py-3 px-4 uppercase">About</a>
+            <a href="gallery.html" class="nav-link block text-center py-3 px-4 uppercase text-red-500">Gallery</a> <!-- ACTIVE LINK -->
+            <a href="bk.html" class="nav-link block text-center py-3 px-4 uppercase">Booking</a>
+            <a href="Video.html" class="nav-link block text-center py-3 px-4 uppercase">Video</a>
         </div>
     </nav>
+    <!-- NAV BAR END -->
 
-    <!-- Main Content Area - Centered with max-width -->
-    <div class="max-w-6xl mx-auto px-4 py-8 mt-[64px] transition-colors duration-300 main-content-area">
-        <!-- Header Section -->
-        <header class="text-white p-6 md:p-8 text-center relative">
-            <!-- Back to Home Button -->
-            <button id="backButton" class="absolute top-4 left-4 p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 transition-all duration-300">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                </svg>
-            </button>
-            <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-2 leading-tight">Oronno Gallery</h1>
-        </header>
+    <!-- Gallery Section -->
+    <section class="min-h-screen bg-black text-white py-16 px-4">
+        <div class="container mx-auto max-w-6xl pt-8">
 
-        <!-- Gallery Grid -->
-        <section class="py-8">
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="galleryGrid">
-                <!-- Gallery Item 1 -->
-                <div class="relative group rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 cursor-pointer gallery-item border-2 border-red-500" data-index="0">
-                    <div class="image-content">
-                        <img src="IMG-20250505-WA0069.jpg" alt="Live Performance">
-                        <div class="overlay flex items-center justify-center">
-                            <p class="text-white text-lg font-semibold">View</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gallery Item 2 -->
-                <div class="relative group rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 cursor-pointer gallery-item border-2 border-red-500" data-index="1">
-                    <div class="image-content">
-                        <img src="IMG-20250505-WA0084.jpg" alt="Live Performance">
-                        <div class="overlay flex items-center justify-center">
-                            <p class="text-white text-lg font-semibold">View</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gallery Item 3 -->
-                <div class="relative group rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 cursor-pointer gallery-item border-2 border-red-500" data-index="2">
-                    <div class="image-content">
-                        <img src="IMG-20250505-WA0085.jpg" alt="Live Performance">
-                        <div class="overlay flex items-center justify-center">
-                            <p class="text-white text-lg font-semibold">View</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gallery Item 4 -->
-                <div class="relative group rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 cursor-pointer gallery-item border-2 border-red-500" data-index="3">
-                    <div class="image-content">
-                        <img src="Screenshot 2025-03-22 192951.png" alt="Live Performance">
-                        <div class="overlay flex items-center justify-center">
-                            <p class="text-white text-lg font-semibold">View</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gallery Item 5 -->
-                <div class="relative group rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 cursor-pointer gallery-item border-2 border-red-500" data-index="4">
-                    <div class="image-content">
-                        <img src="Screenshot 2025-03-22 193018.png" alt="Live Performance">
-                        <div class="overlay flex items-center justify-center">
-                            <p class="text-white text-lg font-semibold">View</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gallery Item 6 -->
-                <div class="relative group rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 cursor-pointer gallery-item border-2 border-red-500" data-index="5">
-                    <div class="image-content">
-                        <img src="Screenshot 2025-03-22 193044.png" alt="Live Performance">
-                        <div class="overlay flex items-center justify-center">
-                            <p class="text-white text-lg font-semibold">View</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gallery Item 7 -->
-                <div class="relative group rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 cursor-pointer gallery-item border-2 border-red-500" data-index="6">
-                    <div class="image-content">
-                        <img src="Screenshot 2025-03-22 193622.png" alt="Live Performance">
-                        <div class="overlay flex items-center justify-center">
-                            <p class="text-white text-lg font-semibold">View</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gallery Item 8 -->
-                <div class="relative group rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 cursor-pointer gallery-item border-2 border-red-500" data-index="7">
-                    <div class="image-content">
-                        <img src="Screenshot 2025-03-22 193638.png" alt="Live Performance">
-                        <div class="overlay flex items-center justify-center">
-                            <p class="text-white text-lg font-semibold">View</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gallery Item 9 -->
-                <div class="relative group rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 cursor-pointer gallery-item border-2 border-red-500" data-index="8">
-                    <div class="image-content">
-                        <img src="IMG-20250505-WA0094.jpg" alt="Live Performance">
-                        <div class="overlay flex items-center justify-center">
-                            <p class="text-white text-lg font-semibold">View</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- "View All" Button -->
-            <div class="text-center mt-8">
-                <button id="viewAllButton" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
-                    View All Images
-                </button>
-            </div>
-        </section>
-    </div>
-
-
-    <!-- Footer -->
-    <footer class="bg-black text-white p-8 mt-8">
-        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
-            <!-- Left Section: Logo and Description -->
-            <div class="flex flex-col items-center md:items-start">
-                <div class="flex items-center mb-4">
-                    <svg class="fill-current h-8 w-8 mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
-                    </svg>
-                    <span class="font-semibold text-2xl tracking-tight">Oronno</span>
-                </div>
-                <p class="text-gray-400 text-sm leading-relaxed">
-                    Pioneer bassist from Bangladesh. Official member of Khola Chhad Unlimited. Passionate musician dedicated to performance, composition & creativity.
+            <!-- Header -->
+            <header class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-extrabold mb-3 text-red-500">Visual Portfolio</h1>
+                <p class="text-lg text-gray-400 max-w-3xl mx-auto">
+                    A collection of live performance moments, studio sessions, and creative visuals captured throughout the journey. Dive into the world of Oronno Sohel Aungkon.
                 </p>
-            </div>
+            </header>
 
-            <!-- Middle Section: Quick Links -->
-            <div class="md:pl-12">
-                <h3 class="text-xl font-semibold mb-4">Quick Links</h3>
-                <ul class="space-y-2">
-                    <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors duration-200">Home</a></li>
-                    <li><a href="biography.html" class="text-gray-400 hover:text-white transition-colors duration-200">About</a></li>
-                    <li><a href="gallery.html" class="text-gray-400 hover:text-white transition-colors duration-200">Gallery</a></li>
-                    <li><a href="bk.html" class="text-gray-400 hover:text-white transition-colors duration-200">Booking</a></li>
-                    <li><a href="Video.html" class="text-gray-400 hover:text-white transition-colors duration-200">Video</a></li>
-                </ul>
-            </div>
+            <!-- Responsive Image Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-            <!-- Right Section: Connect -->
-            <div class="md:text-right">
-                <h3 class="text-xl font-semibold mb-4">Connect</h3>
-                <div class="flex justify-center md:justify-end space-x-4 mb-4">
-                    <a href="https://www.facebook.com/oronnosohelaungkon0" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-200">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-            
-                    <a href="https://www.instagram.com/oronnosohelaungkon/" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-200">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="https://www.youtube.com/@oronnosohelaungkon	" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-200">
-                        <i class="fab fa-youtube"></i>
-                    </a>
+                <!-- Image 1: Live Performance -->
+                <div class="gallery-item">
+                    <img src="Screenshot 2025-03-22 192951.png" alt="Live Concert Shot" class="gallery-image" onerror="this.onerror=null;this.src='https://placehold.co/800x600/1e1e1e/d3d3d3?text=Live+Concert+Shot';" loading="lazy">
+                    <div class="image-overlay"></div>
+                    <div class="image-caption">
+                        <h3 class="text-xl font-bold">Band Fest</h3>
+                        <p class="text-sm text-red-500">Khola Chhad Unlimited</p>
+                    </div>
                 </div>
-                <p class="text-gray-400 text-sm">
-                    Follow for the latest updates, new releases, and behind-the-scenes content.
-                </p>
-            </div>
+
+                <!-- Image 2: Studio Session -->
+                <div class="gallery-item">
+                    <img src="Screenshot 2025-03-22 193638.png" alt="Duronto Tv" class="gallery-image" onerror="this.onerror=null;this.src='https://placehold.co/800x1200/292929/d3d3d3?text=Studio+Session';" loading="lazy">
+                    <div class="image-overlay"></div>
+                    <div class="image-caption">
+                        <h3 class="text-xl font-bold">Durontopona</h3>
+                        <p class="text-sm text-red-500">Khola Chhad Unlimited</p>
+                    </div>
+                </div>
+
+                <!-- Image 3: Gear Setup -->
+                <div class="gallery-item">
+                    <img src="IMG-20250505-WA0069.jpg" alt="Live Concert" class="gallery-image" onerror="this.onerror=null;this.src='https://placehold.co/800x800/383838/d3d3d3?text=Gear+Setup';" loading="lazy">
+                    <div class="image-overlay"></div>
+                    <div class="image-caption">
+                        <h3 class="text-xl font-bold">Sangrain 2025</h3>
+                        <p class="text-sm text-red-500">Khola Chhad Unlimited</p>
+                    </div>
+                </div>
+
+                <!-- Image 4: Portrait/Promo Shot -->
+                <div class="gallery-item">
+                    <img src="IMG-20250505-WA0084.jpg" alt="Live Concert" class="gallery-image" onerror="this.onerror=null;this.src='https://placehold.co/800x1000/1a1a1a/d3d3d3?text=Musician+Portrait';" loading="lazy">
+                    <div class="image-overlay"></div>
+                    <div class="image-caption">
+                        <h3 class="text-xl font-bold">Sangrain 2025</h3>
+                        <p class="text-sm text-red-500">Khola Chhad Unlimited</p>
+                    </div>
+                </div>
+
+                <!-- Image 5: Crowd View -->
+                <div class="gallery-item">
+                    <img src="IMG-20250505-WA0085.jpg" alt="Live Concert" class="gallery-image" onerror="this.onerror=null;this.src='https://placehold.co/800x600/2d2d2d/d3d3d3?text=Crowd+View';" loading="lazy">
+                    <div class="image-overlay"></div>
+                    <div class="image-caption">
+                        <h3 class="text-xl font-bold">Sangrain 2025</h3>
+                        <p class="text-sm text-red-500">Khola Chhad Unlimited</p>
+                    </div>
+                </div>
+                
+                <!-- Image 6: Collaboration -->
+                <div class="gallery-item">
+                    <img src="IMG-20250505-WA0094.jpg" alt="Live Concert" class="gallery-image" onerror="this.onerror=null;this.src='https://placehold.co/800x800/333333/d3d3d3?text=Collaborative+Work';" loading="lazy">
+                    <div class="image-overlay"></div>
+                    <div class="image-caption">
+                        <h3 class="text-xl font-bold">Sangrain 2025</h3>
+                        <p class="text-sm text-red-500">Khola Chhad Unlimited</p>
+                    </div>
+                </div>
+            </div> 
+            <!-- End Responsive Image Grid -->
+
         </div>
-        <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-500 text-xs flex flex-col md:flex-row justify-between items-center">
-            <p>&copy; 2025 Oronno Sohel Aungkon. All rights reserved.</p>
-            <p class="mt-2 md:mt-0">Developed by <span class="text-red-500">&hearts;</span> by O.S.A. Technology</p>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="bg-black text-white py-12 px-4 border-t border-gray-800">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-col md:flex-row justify-between items-center md:items-start space-y-8 md:space-y-0 md:space-x-8">
+                <!-- Signature/Logo and Description -->
+                <div class="flex flex-col items-center md:items-start text-center md:text-left md:w-1/3">
+                    <img src="https://placehold.co/200x50/333/fff?text=Signature" alt="Signature" class="mb-4 w-48 h-auto">
+                    <p class="text-gray-400 text-sm">Pioneer bassist from Bangladesh. Official member of Khola Chhad Unlimited. Passionate musician dedicated to performance, composition & creativity.</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="md:w-1/3 text-center md:text-left">
+                    <h4 class="text-xl font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-300 hover:text-white transition-colors duration-300">Home</a></li>
+                        <li><a href="shop.html" class="text-gray-300 hover:text-white transition-colors duration-300">Shop</a></li>
+                        <li><a href="equipment.html" class="text-gray-300 hover:text-white transition-colors duration-300">Equipment</a></li>
+                        <li><a href="membership.html" class="text-gray-300 hover:text-white transition-colors duration-300">Membership</a></li>
+                        <li><a href="biography.html" class="text-gray-300 hover:text-white transition-colors duration-300">About</a></li>
+                        <li><a href="gallery.html" class="text-red-500 font-bold transition-colors duration-300">Gallery</a></li>
+                        <li><a href="bk.html" class="text-gray-300 hover:text-white transition-colors duration-300">Booking</a></li>
+                        <li><a href="Video.html" class="text-gray-300 hover:text-white transition-colors duration-300">Video</a></li>
+                    </ul>
+                </div>
+
+                <!-- Connect / Social Media -->
+                <div class="md:w-1/3 text-center md:text-right">
+                    <h4 class="text-xl font-semibold mb-4">Connect</h4>
+                    <div class="flex justify-center md:justify-end space-x-4 mb-4">
+                        <a href="https://www.facebook.com/oronnosohelaungkon0" class="text-gray-300 hover:text-white transition-colors duration-300 text-2xl"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/oronnosohelaungkon/" class="text-gray-300 hover:text-white transition-colors duration-300 text-2xl"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.youtube.com/@oronnosohelaungkon    " class="text-gray-300 hover:text-white transition-colors duration-300 text-2xl"><i class="fab fa-youtube"></i></a>
+                    </div>
+                    <p class="text-gray-400 text-sm">Follow for the latest updates, new releases, and behind-the-scenes content.</p>
+                </div>
+            </div>
+
+            <hr class="border-gray-700 my-8">
+
+            <!-- Copyright and Developed By -->
+            <div class="flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
+                <p>&copy; 2025 Oronno Sohel Aungkon. All rights reserved.</p>
+                <p>Developed by <span class="text-red-500">&hearts;</span> by O.S.A. Technology</p>
+            </div>
         </div>
     </footer>
+    
+    <!-- Firebase Initialization and Script Block (for consistency) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    <!-- Custom Warning Modal -->
-    <div id="warningModal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-button" onclick="closeModal()">&times;</span>
-            <i class="fas fa-exclamation-triangle text-yellow-400 text-3xl mb-2"></i> <!-- Warning Icon -->
-            <p class="text-xl font-bold mb-2">Access Denied!</p> <!-- Adjusted margin-bottom -->
-            <p class="text-sm">You can't right-click on this page. Lol!</p> <!-- Smaller text for message -->
-        </div>
-    </div>
+        // --- GLOBAL FIREBASE/APP VARIABLES (Mandatory) ---
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        
+        let app, db, auth;
+        let userId = null;
+        let isAuthReady = false;
 
-    <!-- Full-screen Image Modal (Lightbox) -->
-    <div id="imageModal" class="hidden">
-        <span id="imageModalClose" class="cursor-pointer">&times;</span>
-        <button id="prevButton" class="modal-nav-button"><i class="fas fa-chevron-left"></i></button>
-        <div id="imageModalContent">
-            <img id="modalImage" src="" alt="Gallery Image">
-            <p id="modalCaption"></p>
-        </div>
-        <button id="nextButton" class="modal-nav-button"><i class="fas fa-chevron-right"></i></button>
-    </div>
+        setLogLevel('Debug');
 
-    <script>
-        // Initialize Tone.js synth for warning sound
-        const synth = new Tone.Synth().toDestination();
-
-        const htmlElement = document.documentElement;
-        const backButton = document.getElementById('backButton');
-        const navToggle = document.getElementById('nav-toggle');
-        const mobileMenuContainer = document.getElementById('mobile-menu-container');
-
-        const warningModal = document.getElementById('warningModal');
-
-        // Image Modal elements
-        const imageModal = document.getElementById('imageModal');
-        const modalImage = document.getElementById('modalImage');
-        const modalCaption = document.getElementById('modalCaption');
-        const prevButton = document.getElementById('prevButton');
-        const nextButton = document.getElementById('nextButton');
-        const imageModalClose = document.getElementById('imageModalClose');
-        let galleryItems = document.querySelectorAll('.gallery-item');
-        let currentIndex = 0;
-
-        // Function to show the warning modal
-        function showModal() {
-            warningModal.classList.remove('hidden');
-            warningModal.classList.add('flex');
-            synth.triggerAttackRelease("C4", "8n");
-        }
-
-        // Function to close the warning modal
-        function closeModal() {
-            warningModal.classList.add('hidden');
-            warningModal.classList.remove('flex');
-        }
-
-        // Function to open the image modal
-        function openImageModal(index) {
-            currentIndex = index;
-            updateModalImage();
-            imageModal.classList.add('flex');
-        }
-
-        // Function to close the image modal
-        function closeImageModal() {
-            imageModal.classList.remove('flex');
-        }
-
-        // Function to update the image and caption in the modal
-        function updateModalImage() {
-            galleryItems = document.querySelectorAll('.gallery-item');
-            const currentImage = galleryItems[currentIndex].querySelector('img');
-            modalImage.src = currentImage.src;
-            modalImage.alt = currentImage.alt;
-            modalCaption.textContent = currentImage.alt;
-        }
-
-        // Event listeners for gallery items
-        function attachGalleryItemListeners() {
-            galleryItems.forEach((item, index) => {
-                item.removeEventListener('click', () => openImageModal(index));
-                item.addEventListener('click', () => openImageModal(index));
-            });
-        }
-        attachGalleryItemListeners();
-
-        // Event listener for "View All" button
-        const viewAllButton = document.getElementById('viewAllButton');
-        viewAllButton.addEventListener('click', () => openImageModal(0));
-
-        // Event listeners for image modal navigation
-        prevButton.addEventListener('click', () => {
-            currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
-            updateModalImage();
-        });
-
-        nextButton.addEventListener('click', () => {
-            currentIndex = (currentIndex + 1) % galleryItems.length;
-            updateModalImage();
-        });
-
-        // Event listener for closing image modal
-        imageModalClose.addEventListener('click', closeImageModal);
-
-        // Close image modal if clicked outside content (on the overlay)
-        imageModal.addEventListener('click', function(event) {
-            if (event.target === imageModal) {
-                closeImageModal();
+        async function initFirebase() {
+            if (Object.keys(firebaseConfig).length === 0) {
+                console.error("Firebase config is missing. Cannot initialize Firestore.");
+                return;
             }
-        });
 
-        // Keyboard navigation for image modal
-        document.addEventListener('keydown', function(e) {
-            if (imageModal.classList.contains('flex')) {
-                if (e.key === 'ArrowLeft') {
-                    prevButton.click();
-                } else if (e.key === 'ArrowRight') {
-                    nextButton.click();
-                } else if (e.key === 'Escape') {
-                    closeImageModal();
+            try {
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
                 }
+
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        console.log("Firebase initialized and user signed in:", userId);
+                    } else {
+                        console.log("User is signed out.");
+                        userId = null;
+                    }
+                    isAuthReady = true;
+                });
+
+            } catch (error) {
+                console.error("Error during Firebase initialization or sign-in:", error);
             }
-        });
+        }
 
-        // Ensure the page always loads in dark mode
-        document.addEventListener('DOMContentLoaded', () => {
-            htmlElement.classList.add('dark');
-            htmlElement.classList.remove('light');
-            attachGalleryItemListeners();
-        });
+        // Start initialization on load
+        initFirebase();
 
-        // Add event listener for the back button
-        backButton.addEventListener('click', () => {
-            window.location.href = 'index.html';
-        });
 
-        // Toggle navigation for mobile
-        navToggle.addEventListener('click', function () {
-            mobileMenuContainer.classList.toggle('active');
-        });
+        // --- APPLICATION LOGIC ---
+        
+        /**
+         * Toggles the mobile navigation menu.
+         */
+        window.toggleMenu = function() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('menu-icon');
+            
+            menu.classList.toggle('is-active');
 
-        // Disable right-click and show warning
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            showModal();
-        });
-
-        // Close warning modal if clicked outside content
-        window.addEventListener('click', function(event) {
-            if (event.target == warningModal) {
-                closeModal();
+            if (menu.classList.contains('is-active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
             }
-        });
+        };
+
+        // Note: No submission logic needed for the gallery page, 
+        // but toggleMenu function is kept for navigation functionality.
     </script>
 </body>
 </html>

@@ -1,977 +1,258 @@
 <!DOCTYPE html>
-<html lang="en" class="dark"> <!-- Default to dark mode -->
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oronno Sohel Aungkon - Videos</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts - Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for social icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Tone.js for sound effects (kept for modal warning sound) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
-
+    <title>Video - Oronno Sohel Aungkon</title>
+    <!-- Tailwind CSS CDN --><script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Add a more stylized font if desired, e.g., 'Montserrat' or 'Poppins' --><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
     <style>
-        /* Base styles for the entire page, matching the new design's dark background */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #000; /* Solid black background */
-            color: #e2e8f0; /* Light text for dark background */
-            line-height: 1.6;
-            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
-            margin: 0; /* Remove default body margin */
-            padding-left: 0; /* No horizontal padding on body, handled by inner containers */
-            padding-right: 0; /* No horizontal padding on body, handled by inner containers */
+            background-color: #000;
+            padding-top: 64px; /* Space for the fixed navbar */
         }
-
-        /* Dark mode styles - applied when 'dark' class is on html element */
-        html.dark body {
-            background-color: #1a202c; /* Slightly less black for dark mode body */
-            color: #e2e8f0; /* Light text */
+        
+        /* Navbar Styles */
+        .navbar {
+            transition: background-color 0.3s ease;
         }
-
-        /* Ensure text and border colors adapt for sections within the main content */
-        html.dark .text-gray-800 {
-            color: #e2e8f0; /* Lighter headings */
-        }
-
-        html.dark .text-gray-700 {
-            color: #cbd5e0; /* Lighter body text */
-        }
-
-        html.dark .border-gray-200 {
-            border-color: #4a5568; /* Darker border for sections */
-        }
-
-        /* Custom scrollbar for a cleaner look */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-        html.dark ::-webkit-scrollbar-track {
-            background: #2d3748;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 10px;
-        }
-        html.dark ::-webkit-scrollbar-thumb {
-            background: #6b7280;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-        html.dark ::-webkit-scrollbar-thumb:hover {
-            background: #4a5568;
-        }
-
-        /* Fixed navigation bar */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000; /* Ensure nav is on top of other content */
-            background-color: #000; /* Ensure nav background is black */
-        }
-
-        /* Nav link hover effect */
         .nav-link {
-            transition: color 0.3s ease;
+            transition: color 0.3s ease, border-bottom 0.3s ease;
+            position: relative;
+            padding-bottom: 5px;
+            color: #ccc;
         }
-        .nav-link:hover {
-            color: #FFD700; /* Gold color on hover */
+        .nav-link:hover:not(.text-red-500) {
+            color: #FF0000;
         }
-
-        /* Mobile navigation menu */
+        /* Link underline effect on hover */
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: #FF0000;
+            transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+        }
+        .nav-link:hover::after:not(.text-red-500::after) {
+            width: 100%;
+            left: 0;
+        }
+        
+        /* Responsive Navbar - Using 'is-active' class for JS toggle */
         @media (max-width: 768px) {
-            .navbar-menu {
-                display: none; /* Hide menu on small screens by default */
-            }
-            .navbar-social {
-                display: none; /* Hide social icons on small screens by default */
-            }
-            .navbar-toggle {
-                display: block; /* Show toggle button */
-            }
-            .navbar-menu.active {
+            .navbar-menu { display: none; }
+            .navbar-social { display: none; }
+            .navbar-toggle { display: block; }
+            /* This class is toggled by JavaScript */
+            .navbar-menu.is-active {
                 display: flex;
                 flex-direction: column;
-                position: absolute;
-                top: 64px; /* Height of navbar */
+                position: fixed;
+                top: 64px;
                 left: 0;
                 width: 100%;
-                background-color: rgba(0, 0, 0, 0.9);
+                background-color: rgba(0, 0, 0, 0.98);
                 padding: 1rem 0;
                 border-top: 1px solid rgba(255, 255, 255, 0.2);
+                z-index: 50;
+                height: calc(100vh - 64px);
+                overflow-y: auto;
             }
-            .navbar-menu.active a {
-                padding: 0.5rem 1rem;
+            .navbar-menu.is-active a {
+                padding: 1rem 1rem;
                 text-align: center;
+                border-bottom: 1px solid #1a1a1a;
+                font-weight: 600;
             }
-        }
-
-        /* Styles for the custom modal */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1000; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
-            justify-content: flex-start; /* Align to start (left) */
-            align-items: flex-start; /* Align to start (top) */
-            padding: 1rem; /* Add some padding around the modal */
-        }
-        .modal.flex { /* Only display flex when active */
-             display: flex;
-        }
-        .modal-content {
-            background-color: #1a1a1a;
-            padding: 1.5rem; /* Reduced padding for smaller size */
-            border-radius: 0.75rem; /* rounded-xl */
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3); /* shadow-xl */
-            width: 90%;
-            max-width: 300px; /* Smaller max-width */
-            text-align: left; /* Align text to left */
-            color: white;
-            position: relative;
-            top: 1rem;
-            left: 1rem;
-        }
-        .close-button {
-            position: absolute;
-            top: 0.5rem; /* Adjusted for smaller padding */
-            right: 0.5rem; /* Adjusted for smaller padding */
-            color: #aaa;
-            font-size: 1.2rem; /* Slightly smaller close button */
-            font-weight: bold;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-        .close-button:hover,
-        .close-button:focus {
-            color: #fff;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        /* Rainbow animation for text */
-        @keyframes rainbow {
-            0% { text-shadow: 0 0 5px red; }
-            14% { text-shadow: 0 0 5px orange; }
-            28% { text-shadow: 0 0 5px yellow; }
-            42% { text-shadow: 0 0 5px green; }
-            56% { text-shadow: 0 0 5px blue; }
-            70% { text-shadow: 0 0 5px indigo; }
-            84% { text-shadow: 0 0 5px violet; }
-            100% { text-shadow: 0 0 5px red; }
-        }
-
-        .rainbow-text {
-            animation: rainbow 6s linear infinite;
-        }
-
-        /* Rainbow animation for button background */
-        @keyframes rainbow-background {
-            0% { background-color: #FF0000; } /* Red */
-            14% { background-color: #FF7F00; } /* Orange */
-            28% { background-color: #FFFF00; } /* Yellow */
-            42% { background-color: #00FF00; } /* Green */
-            56% { background-color: #0000FF; } /* Blue */
-            70% { background-color: #4B0082; } /* Indigo */
-            84% { background-color: #9400D3; } /* Violet */
-            100% { background-color: #FF0000; } /* Red */
-        }
-
-        .rainbow-button {
-            animation: rainbow-background 6s linear infinite;
-            color: white; /* Text color for the button */
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: bold;
-            transition: transform 0.2s ease-in-out;
-            border: none; /* Remove default button border */
-            cursor: pointer; /* Indicate it's clickable */
-            display: flex; /* Make it a flex container */
-            align-items: center; /* Vertically align items */
-            justify-content: center; /* Horizontally center items */
-            gap: 0.5rem; /* Space between text and icon */
-        }
-        .rainbow-button:hover {
-            transform: scale(1.05); /* Slightly enlarge on hover */
-        }
-
-        /* Responsive video container */
-        .video-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            height: 0;
-            overflow: hidden;
-            border-radius: 0.5rem; /* rounded-lg */
-        }
-
-        .video-container iframe { /* Changed video to iframe */
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-
-        /* Search container styling for icon positioning */
-        .search-container {
-            position: relative;
-            display: flex; /* Use flex to align input and icon */
-            align-items: center; /* Vertically center items */
-            width: 100%; /* Full width on small screens */
-            max-width: 300px; /* Max width for larger screens */
-        }
-
-        .search-container input {
-            padding-right: 2.5rem; /* Make space for the icon */
-        }
-
-        .search-container .search-icon {
-            position: absolute;
-            right: 0.75rem; /* Position the icon inside the input field */
-            color: #cbd5e0; /* Icon color */
-        }
-
-        /* Pagination styles */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 2rem;
-            gap: 0.5rem;
-        }
-        .pagination button {
-            background-color: #2d3748;
-            color: #e2e8f0;
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
-            transition: background-color 0.2s ease;
-        }
-        .pagination button:hover:not(.active) {
-            background-color: #4a5568;
-        }
-        .pagination button.active {
-            background-color: #4299e1; /* Blue for active page */
-            font-weight: bold;
-        }
-        .pagination button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* Scroll to Top Button with Progress Ring */
-        #scrollToTopBtn {
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            width: 50px; /* Adjust size as needed */
-            height: 50px; /* Adjust size as needed */
-            display: flex; /* Use flex to center content */
-            align-items: center;
-            justify-content: center;
-            position: fixed;
-            bottom: 2rem; /* Tailwind bottom-8 */
-            right: 2rem; /* Tailwind right-8 */
-            z-index: 50; /* Tailwind z-50 */
-            background-color: #2d3748; /* Darker background for the button */
-            border-radius: 9999px; /* Fully rounded */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow-lg */
-            opacity: 0; /* Hidden by default */
-            pointer-events: none; /* Disable interaction when hidden */
-        }
-
-        #scrollToTopBtn.visible {
-            opacity: 1;
-            pointer-events: auto; /* Enable interaction when visible */
-        }
-
-        #scrollToTopBtn:hover {
-            background-color: #4a5568; /* Darker hover */
-        }
-
-        .progress-ring {
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        .progress-ring-track {
-            stroke: #4a5568; /* Track color */
-        }
-
-        .progress-ring-progress {
-            stroke: #4299e1; /* Progress color (blue) */
-            transition: stroke-dashoffset 0.3s ease; /* Smooth transition for progress */
-        }
-
-        /* Style for clickable search results in sidebar */
-        .sidebar-search-result {
-            cursor: pointer;
-            padding: 0.5rem 0;
-            transition: color 0.2s ease;
-        }
-        .sidebar-search-result:hover {
-            color: #4299e1; /* Blue on hover */
-        }
-        /* Loading spinner for search */
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 4px solid #4299e1;
-            width: 24px;
-            height: 24px;
-            -webkit-animation: spin 1s linear infinite; /* Safari */
-            animation: spin 1s linear infinite;
-        }
-
-        /* Safari */
-        @-webkit-keyframes spin {
-            0% { -webkit-transform: rotate(0deg); }
-            100% { -webkit-transform: rotate(360deg); }
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Navigation Bar -->
-    <nav class="relative z-20 w-full bg-black text-white p-4 shadow-lg">
-        <div class="container mx-auto flex justify-between items-center">
-            <!-- Logo -->
-            <div class="flex items-center space-x-2">
-                <!-- SVG for Musico logo -->
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 16H8V8H10V16ZM14 16H12V8H14V16ZM18 16H16V8H18V16Z" fill="white"/>
+    <!-- NAV BAR START --><nav class="fixed top-0 left-0 z-50 w-full bg-black/90 backdrop-blur-sm text-white p-4 border-b border-gray-800 navbar">
+        <div class="container mx-auto flex justify-between items-center max-w-6xl">
+            <!-- Logo --><div class="flex items-center space-x-2">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-red-500">
+                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 16H8V8H10V16ZM14 16H12V8H14V16ZM18 16H16V8H18V16Z" fill="currentColor"/>
                 </svg>
-                <!-- Changed text-xl to text-lg for smaller screens, and sm:text-xl for larger screens -->
-                <span class="font-semibold text-lg sm:text-xl tracking-tight rainbow-text">Oronno Sohel Aungkon </span>
+                <span class="text-2xl font-bold"><span class="text-lg font-normal text-red-500">Oronno Sohel Aungkon</span></span>
             </div>
 
-            <!-- Mobile Navigation Toggle -->
-            <div class="md:hidden">
-                <button id="nav-toggle" class="navbar-toggle flex items-center px-3 py-2 border rounded text-gray-200 border-gray-400 hover:text-white hover:border-white">
-                    <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
-                </button>
-            </div>
-
-            <!-- Navigation Links -->
-            <div class="hidden md:flex space-x-6 navbar-menu flex-grow justify-center" id="nav-content">
+            <!-- Navigation Links (Desktop) - 'Video' is active --><div id="desktop-menu" class="hidden md:flex space-x-6 navbar-menu flex-grow justify-center uppercase font-semibold text-sm tracking-wider">
                 <a href="index.html" class="nav-link">Home</a>
+                <a href="shop.html" class="nav-link">Shop</a>
+                <a href="equipment.html" class="nav-link">Equipment</a>
+                <a href="membership.html" class="nav-link">Membership</a>
                 <a href="biography.html" class="nav-link">About</a>
                 <a href="gallery.html" class="nav-link">Gallery</a>
-                <a href="bk.html" class="nav-link">Booking</a> <!-- Changed to Videos -->
-                <a href="Video.html" class="nav-link">Video</a>
+                <a href="bk.html" class="nav-link">Booking</a> 
+                <a href="Video.html" class="nav-link text-red-500">Video</a> <!-- ACTIVE LINK --></div>
+
+            <!-- Social Icons (Desktop) --><div class="hidden md:flex space-x-4 navbar-social">
+                <a href="https://www.facebook.com/oronnosohelaungkon0" class="text-gray-400 hover:text-red-500 transition-colors duration-300"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/oronnosohelaungkon/" class="text-gray-400 hover:text-red-500 transition-colors duration-300"><i class="fab fa-instagram"></i></a>
             </div>
 
-            <!-- Social Icons -->
-            <div class="hidden md:flex space-x-4 navbar-social">
-                <a href="https://www.facebook.com/oronnosohelaungkon0" target="_blank" class="text-white hover:text-gray-400"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://www.instagram.com/oronnosohelaungkon/" target="_blank" class="text-white hover:text-gray-400"><i class="fab fa-instagram"></i></a>
-            </div>
+            <!-- Mobile menu toggle --><button class="md:hidden text-white focus:outline-none navbar-toggle" onclick="toggleMenu()">
+                <i id="menu-icon" class="fas fa-bars text-xl"></i>
+            </button>
         </div>
+
+        <!-- Mobile Menu Dropdown Links - 'Video' is active --><div id="mobile-menu" class="md:hidden navbar-menu absolute top-full left-0 w-full bg-black/95 flex-col transition-all duration-300 shadow-xl">
+            <a href="index.html" class="nav-link block text-center py-3 px-4 uppercase">Home</a>
+            <a href="shop.html" class="nav-link block text-center py-3 px-4 uppercase">Shop</a>
+            <a href="equipment.html" class="nav-link block text-center py-3 px-4 uppercase">Membership</a>
+            <a href="biography.html" class="nav-link block text-center py-3 px-4 uppercase">About</a>
+            <a href="gallery.html" class="nav-link block text-center py-3 px-4 uppercase">Gallery</a>
+            <a href="bk.html" class="nav-link block text-center py-3 px-4 uppercase">Booking</a> 
+            <a href="Video.html" class="nav-link block text-center py-3 px-4 uppercase text-red-500">Video</a> <!-- ACTIVE LINK --></div>
     </nav>
+    <!-- NAV BAR END --><!-- Coming Soon Section for Video Content --><section class="min-h-screen bg-black text-white px-4 flex flex-col items-center justify-center text-center py-16">
+        <div class="max-w-xl">
+            <h1 class="text-6xl md:text-8xl font-extrabold mb-4 text-red-500 uppercase tracking-widest leading-none" style="font-family: 'Montserrat', sans-serif;">Coming Soon</h1>
+            <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white uppercase tracking-wider" style="font-family: 'Poppins', sans-serif;">Launching Soon</h2>
+            
+            <p class="text-xl md:text-2xl font-medium text-gray-300 mb-8 max-w-lg mx-auto" style="font-family: 'Poppins', sans-serif;">
+                We're crafting something <span class="text-red-400 font-semibold">truly amazing</span> for you! Our new video content is coming soon and we can't wait to share it.
+            </p>
 
-    <!-- Main Content Area - Centered with max-width -->
-    <!-- Changed max-w-6xl to max-w-full to allow it to expand more -->
-    <div class="max-w-full mx-auto transition-colors duration-300 pt-4">
-        <!-- Header Section -->
-        <header class="text-white p-6 md:p-8 text-center relative">
-            <!-- Removed Back to Home Button -->
-        </header>
-
-        <main class="py-6 md:py-8 lg:py-10"> <!-- Removed horizontal padding from main -->
-            <div class="flex flex-col md:flex-row gap-8 items-start px-6 md:px-8 lg:px-10"> <!-- Added horizontal padding here -->
-                <!-- Main Content for Videos -->
-                <div class="flex-grow">
-                    <!-- Profile Section moved here, removed mb-12 -->
-                    <section class="flex items-center gap-4 mb-4"> <!-- Removed flex-col, adjusted for horizontal layout -->
-                        <!-- Placeholder for Profile Picture -->
-                        <img src="IMG-20250505-WA0094.jpg" alt="Oronno Sohel Aungkon Profile" class="rounded-full w-32 h-32 object-cover border-4 border-yellow-400 shadow-lg"> <!-- Increased size -->
-                        <div>
-                            <h2 class="text-4xl font-bold text-gray-200">Oronno Sohel Aungkon</h2> <!-- Increased font size -->
-                            <p class="text-xl text-gray-400">BANGLADESHI GUITARIST, BASSIST, COMPOSER & LYRICIST</p> <!-- Increased font size -->
-                        </div>
-                    </section>
-
-                    <!-- New wrapper div for video content to match sidebar padding -->
-                    <div class="bg-gray-800 p-6 rounded-lg shadow-xl">
-                        <!-- Video Grid - Changed lg:grid-cols-3 to lg:grid-cols-2 -->
-                        <div id="video-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-                            <!-- Music Video 1 -->
-                            <div class="video-item bg-gray-800 rounded-lg shadow-xl overflow-hidden" data-video-id="video1">
-                                <div class="video-container">
-                                    <!-- Replace VIDEO_ID_1 with your actual YouTube video ID -->
-                                    <iframe src="https://www.youtube.com/embed/wzCeEkhx554?si=yQGIGGWvu615M8YV" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                </div>
-                                <div class="p-4">
-                                    <h3 class="text-xl font-semibold text-white mb-2 video-title">Obocheton</h3>
-                                    <p class="text-gray-400 text-sm video-description">Cover Music Video Of Nemesis.</p>
-                                    <p class="text-gray-500 text-xs mt-2 video-date">Date: Oct 7, 2023</p>
-                                </div>
-                            </div>
-                            <!-- Music Video 2 -->
-                            <div class="video-item bg-gray-800 rounded-lg shadow-xl overflow-hidden" data-video-id="video2">
-                                <div class="video-container">
-                                    <!-- Replace VIDEO_ID_2 with your actual YouTube video ID -->
-                                    <iframe src="https://www.youtube.com/embed/8jwm4T33Y7w?si=xGgIWsTKyjrA_Yz0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                </div>
-                                <div class="p-4">
-                                    <h3 class="text-xl font-semibold text-white mb-2 video-title">Its My Life</h3>
-                                    <p class="text-gray-400 text-sm video-description">Cover Video.</p>
-                                    <p class="text-gray-500 text-xs mt-2 video-date">Date: Apr 17, 2023</p>
-                                </div>
-                            </div>
-                            <!-- Music Video 3 -->
-                            <div class="video-item bg-gray-800 rounded-lg shadow-xl overflow-hidden" data-video-id="video3">
-                                <div class="video-container">
-                                    <!-- Replace VIDEO_ID_3 with your actual YouTube video ID -->
-                                    <iframe src="https://www.youtube.com/embed/E5zmKIjDOH4?si=KtD5aeTGJFx0CSCe" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                </div>
-                                <div class="p-4">
-                                    <h3 class="text-xl font-semibold text-white mb-2 video-title">Ami Akash Pathabo</h3>
-                                    <p class="text-gray-400 text-sm video-description">Cover Video.</p>
-                                    <p class="text-gray-500 text-xs mt-2">Date: Apr 17, 2023</p>
-                                </div>
-                            </div>
-                            <!-- Music Video 4 -->
-                            <div class="video-item bg-gray-800 rounded-lg shadow-xl overflow-hidden" data-video-id="video4">
-                                <div class="video-container">
-                                    <!-- Replace VIDEO_ID_4 with your actual YouTube video ID -->
-                                    <iframe src="https://www.youtube.com/embed/HKvpypkKfRI?si=Lq0WWz-ZD8-TLAG_" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                </div>
-                                <div class="p-4">
-                                    <h3 class="text-xl font-semibold text-white mb-2 video-title">Bhenge Porona Ebhabe </h3>
-                                    <p class="text-gray-400 text-sm video-description">Lesson Video.</p>
-                                    <p class="text-gray-500 text-xs mt-2">Date: Jul 20, 2021</p>
-                                </div>
-                            </div>
-                            <!-- Music Video 5 -->
-                            <div class="video-item bg-gray-800 rounded-lg shadow-xl overflow-hidden" data-video-id="video5">
-                                <div class="video-container">
-                                    <!-- Replace VIDEO_ID_5 with your actual YouTube video ID -->
-                                    <iframe src="https://www.youtube.com/embed/q-0sOHYBeDw?si=tE8ZJlXZrzV1_ecM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                </div>
-                                <div class="p-4">
-                                    <h3 class="text-xl font-semibold text-white mb-2 video-title">Beche Thakar Gan</h3>
-                                    <p class="text-gray-400 text-sm video-description">Family Concert.</p>
-                                    <p class="text-gray-500 text-xs mt-2">Date: Feb 5, 2021 </p>
-                                </div>
-                            </div>
-                            <!-- Music Video 6 -->
-                            <div class="video-item bg-gray-800 rounded-lg shadow-xl overflow-hidden" data-video-id="video6">
-                                <div class="video-container">
-                                    <!-- Replace VIDEO_ID_6 with your actual YouTube video ID -->
-                                    <iframe src="https://www.youtube.com/embed/foJVCYIKncA?si=UBax31Nh5uXT5qUe" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                </div>
-                                <div class="p-4">
-                                    <h3 class="text-xl font-semibold text-white mb-2 video-title"> Asha</h3>
-                                    <p class="text-gray-400 text-sm video-description">Lesson Video</p>
-                                    <p class="text-gray-500 text-xs mt-2">Date: Nov 25, 2020</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Message for no videos on page -->
-                            <p id="no-videos-message" class="text-center text-gray-500 mt-8 hidden">No videos available on this page yet.</p>
-                        </div>
-                    </section>
-                    <!-- Pagination Controls -->
-                    <div id="pagination-controls" class="pagination">
-                        <button id="prev-page" disabled>Previous</button>
-                        <div id="page-numbers" class="flex gap-2"></div>
-                        <button id="next-page">Next</button>
-                    </div>
-                </div>
-
-                <!-- Sidebar -->
-                <!-- Increased md:w-72 to md:w-80 and lg:w-96 to lg:w-1/3 (relative width) for more space -->
-                <div class="w-full md:w-80 lg:w-1/3 space-y-8 flex-shrink-0">
-                    <!-- Search Bar (moved here) -->
-                    <div class="bg-gray-800 p-6 rounded-lg shadow-xl">
-                        <h3 class="text-xl font-semibold text-gray-200 mb-4">Search</h3>
-                        <div class="search-container">
-                            <input type="text" id="videoSearchSidebar" placeholder="Search videos..." class="shadow appearance-none border rounded py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 text-white placeholder-gray-400 w-full">
-                            <i class="fas fa-search search-icon"></i>
-                        </div>
-                    </div>
-
-                    <!-- Search Results / Latest Posts Section -->
-                    <div class="bg-gray-800 p-6 rounded-lg shadow-xl">
-                        <h3 id="sidebar-heading" class="text-xl font-semibold text-gray-200 mb-4">Latest Posts</h3>
-                        <ul id="sidebar-content-list" class="space-y-3 text-gray-400 text-sm">
-                            <!-- Posts/Search results will be dynamically inserted here -->
-                        </ul>
-                        <div id="search-loading-spinner" class="flex justify-center items-center mt-4 hidden">
-                            <div class="spinner"></div>
-                        </div>
-                    </div>
-
-                    <!-- Learn Bass Button moved here, outside of Latest Posts section but within the sidebar -->
-                    <button id="learnBassButton" class="rainbow-button px-6 py-3 rounded-lg shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 w-full">
-                        Learn Bass <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Footer -->
-    <footer class="bg-black text-white p-8 mt-8">
-        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
-            <!-- Left Section: Logo and Description -->
-            <div class="flex flex-col items-center md:items-start">
-                <div class="flex items-center mb-4">
-                    <svg class="fill-current h-8 w-8 mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
-                    </svg>
-                    <span class="font-semibold text-2xl tracking-tight">Oronno</span>
-                </div>
-                <p class="text-gray-400 text-sm leading-relaxed">
-                    Pioneer bassist from Bangladesh. Official member of Khola Chhad Unlimited. Passionate musician dedicated to performance, composition & creativity.
-                </p>
+            <div class="space-y-4 mb-10">
+                <p class="text-2xl font-bold text-white uppercase tracking-wide" style="font-family: 'Montserrat', sans-serif;">Stay Tuned</p>
+                <p class="text-xl font-semibold text-red-500 animate-pulse">Get Notified</p>
             </div>
 
-            <!-- Middle Section: Quick Links -->
-            <div class="md:pl-12">
-                <h3 class="text-xl font-semibold mb-4">Quick Links</h3>
-                <ul class="space-y-2">
-                    <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors duration-200">Home</a></li>
-                    <li><a href="biography.html" class="text-gray-400 hover:text-white transition-colors duration-200">About</a></li>
-                    <li><a href="gallery.html" class="text-gray-400 hover:text-white transition-colors duration-200">Gallery</a></li>
-                    <li><a href="bk.html" class="text-gray-400 hover:text-white transition-colors duration-200">Booking</a></li>
-                    <li><a href="Video.html" class="text-gray-400 hover:text-white transition-colors duration-200">Video</a></li>
-                </ul>
-            </div>
-
-            <!-- Right Section: Connect -->
-            <div class="md:text-right">
-                <h3 class="text-xl font-semibold mb-4">Connect</h3>
-                <div class="flex justify-center md:justify-end space-x-4 mb-4">
-                    <a href="https://www.facebook.com/oronnosohelaungkon0" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-200">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="https://www.instagram.com/oronnosohelaungkon/" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-200">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="https://www.youtube.com/@oronnosohelaungkon	" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-200">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                </div>
-                <p class="text-gray-400 text-sm">
-                    Follow for the latest updates, new releases, and behind-the-scenes content.
-                </p>
+            <div class="p-6 bg-gray-900 rounded-xl shadow-2xl border border-gray-700">
+                <p class="text-lg font-medium text-gray-400 mb-2">For exclusive updates and release alerts, email us at:</p>
+                <a href="mailto:oronnosohelaungkon@gmail.com" class="text-2xl font-bold text-red-500 hover:text-white transition-colors duration-300">
+                    oronnosohelaungkon@gmail.com
+                </a>
             </div>
         </div>
-        <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-500 text-xs flex flex-col md:flex-row justify-between items-center">
-            <p>&copy; 2025 Oronno Sohel Aungkon. All rights reserved.</p>
-            <p class="mt-2 md:mt-0">Developed by <span class="text-red-500">&hearts;</span> by O.S.A. Technology</p>
+    </section>
+
+    <!-- Footer Section --><footer class="bg-black text-white py-12 px-4 border-t border-gray-800">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-col md:flex-row justify-between items-center md:items-start space-y-8 md:space-y-0 md:space-x-8">
+                <!-- Signature/Logo and Description --><div class="flex flex-col items-center md:items-start text-center md:text-left md:w-1/3">
+                    <img src="https://placehold.co/200x50/333/fff?text=Signature" alt="Signature" class="mb-4 w-48 h-auto">
+                    <p class="text-gray-400 text-sm">Pioneer bassist from Bangladesh. Official member of Khola Chhad Unlimited. Passionate musician dedicated to performance, composition & creativity.</p>
+                </div>
+
+                <!-- Quick Links --><div class="md:w-1/3 text-center md:text-left">
+                    <h4 class="text-xl font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-300 hover:text-white transition-colors duration-300">Home</a></li>
+                        <li><a href="shop.html" class="text-gray-300 hover:text-white transition-colors duration-300">Shop</a></li>
+                        <li><a href="equipment.html" class="text-gray-300 hover:text-white transition-colors duration-300">Equipment</a></li>
+                        <li><a href="membership.html" class="text-gray-300 hover:text-white transition-colors duration-300">Membership</a></li>
+                        <li><a href="biography.html" class="text-gray-300 hover:text-white transition-colors duration-300">About</a></li>
+                        <li><a href="gallery.html" class="text-gray-300 hover:text-white transition-colors duration-300">Gallery</a></li>
+                        <li><a href="bk.html" class="text-gray-300 hover:text-white transition-colors duration-300">Booking</a></li>
+                        <li><a href="Video.html" class="text-red-500 font-bold transition-colors duration-300">Video</a></li>
+                    </ul>
+                </div>
+
+                <!-- Connect / Social Media --><div class="md:w-1/3 text-center md:text-right">
+                    <h4 class="text-xl font-semibold mb-4">Connect</h4>
+                    <div class="flex justify-center md:justify-end space-x-4 mb-4">
+                        <a href="https://www.facebook.com/oronnosohelaungkon0" class="text-gray-300 hover:text-white transition-colors duration-300 text-2xl"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/oronnosohelaungkon/" class="text-gray-300 hover:text-white transition-colors duration-300 text-2xl"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.youtube.com/@oronnosohelaungkon" class="text-gray-300 hover:text-white transition-colors duration-300 text-2xl"><i class="fab fa-youtube"></i></a>
+                    </div>
+                    <p class="text-gray-400 text-sm">Follow for the latest updates, new releases, and behind-the-scenes content.</p>
+                </div>
+            </div>
+
+            <hr class="border-gray-700 my-8">
+
+            <!-- Copyright and Developed By --><div class="flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
+                <p>&copy; 2025 Oronno Sohel Aungkon. All rights reserved.</p>
+                <p>Developed by <span class="text-red-500">&hearts;</span> by O.S.A. Technology</p>
+            </div>
         </div>
     </footer>
+    
+    <!-- Firebase Initialization and Script Block --><script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    <!-- Custom Warning Modal -->
-    <div id="warningModal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-button" onclick="window.closeModal()">×</span>
-            <div class="flex items-center justify-center space-x-2 mb-2">
-                <i class="fas fa-exclamation-triangle text-yellow-400 text-3xl"></i> <!-- Warning Icon -->
-            </div>
-            <p class="text-xl font-bold mb-2 text-center">Warning!</p>
-            <p id="modal-message" class="text-sm text-center">You cannot right-click on this page! Ha Ha!</p> <!-- Default message -->
-        </div>
-    </div>
+        // --- GLOBAL FIREBASE/APP VARIABLES (Mandatory) ---
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        
+        let app, db, auth;
+        let userId = null;
+        let isAuthReady = false;
 
-    <!-- Scroll to Top Button with Progress Ring -->
-    <div id="scrollToTopBtn" class="fixed bottom-8 right-8 z-50 p-3 rounded-full bg-gray-800 text-white shadow-lg cursor-pointer hidden">
-        <svg class="progress-ring" width="50" height="50" viewBox="0 0 50 50">
-            <circle class="progress-ring-track" cx="25" cy="25" r="22" fill="transparent" stroke="#4a5568" stroke-width="4"></circle>
-            <circle class="progress-ring-progress" cx="25" cy="25" r="22" fill="transparent" stroke="#4299e1" stroke-width="4" stroke-linecap="round" transform="rotate(-90 25 25)"></circle>
-        </svg>
-        <i class="fas fa-arrow-up absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xl"></i>
-    </div>
+        setLogLevel('Debug');
 
-    <script type="module">
-        // Tone.js synth for warning sound
-        const synth = new Tone.Synth().toDestination();
-
-        const htmlElement = document.documentElement;
-        const navToggle = document.getElementById('nav-toggle');
-        const navContent = document.getElementById('nav-content');
-        const warningModal = document.getElementById('warningModal');
-        const modalMessage = document.getElementById('modal-message');
-        const videoSearchInput = document.getElementById('videoSearchSidebar');
-        const videoListContainer = document.getElementById('video-list');
-        const sidebarContentList = document.getElementById('sidebar-content-list');
-        const sidebarHeading = document.getElementById('sidebar-heading');
-        const noVideosMessage = document.getElementById('no-videos-message');
-        const learnBassButton = document.getElementById('learnBassButton');
-        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
-        const progressCircle = document.querySelector('.progress-ring-progress');
-        const searchLoadingSpinner = document.getElementById('search-loading-spinner');
-
-        const radius = progressCircle.r.baseVal.value;
-        const circumference = 2 * Math.PI * radius;
-
-        progressCircle.style.strokeDasharray = `${circumference} ${circumference}`;
-        progressCircle.style.strokeDashoffset = circumference;
-
-        const videosPerPage = 6;
-        let currentPage = 1;
-        let allVideoItems = [];
-        let currentDisplayVideos = [];
-
-        // Function to show the modal (modified to accept a message)
-        window.showModal = function(message = "You cannot right-click on this page! Ha Ha!") {
-            modalMessage.textContent = message;
-            warningModal.classList.remove('hidden');
-            warningModal.classList.add('flex');
-            synth.triggerAttackRelease("C4", "8n");
-        }
-
-        // Function to close the modal
-        window.closeModal = function() {
-            warningModal.classList.add('hidden');
-            warningModal.classList.remove('flex');
-        }
-
-        // Function to render videos for the current page
-        function renderVideos() {
-            videoListContainer.innerHTML = '';
-
-            const startIndex = (currentPage - 1) * videosPerPage;
-            const endIndex = startIndex + videosPerPage;
-            const videosToDisplay = currentDisplayVideos.slice(startIndex, endIndex);
-
-            if (videosToDisplay.length > 0) {
-                videosToDisplay.forEach(video => {
-                    videoListContainer.appendChild(video);
-                });
-                noVideosMessage.classList.add('hidden');
-            } else {
-                window.showModal("No videos available on this page yet.");
-                noVideosMessage.classList.remove('hidden');
+        async function initFirebase() {
+            if (Object.keys(firebaseConfig).length === 0) {
+                console.error("Firebase config is missing. Cannot initialize Firestore.");
+                return;
             }
-
-            updatePaginationControls();
-        }
-
-        // Function to update pagination buttons and numbers
-        function updatePaginationControls() {
-            const totalPages = Math.ceil(currentDisplayVideos.length / videosPerPage);
-            const prevButton = document.getElementById('prev-page');
-            const nextButton = document.getElementById('next-page');
-            const pageNumbersContainer = document.getElementById('page-numbers');
-
-            prevButton.disabled = currentPage === 1;
-            nextButton.disabled = currentPage === totalPages;
-
-            pageNumbersContainer.innerHTML = '';
-
-            if (totalPages > 0) {
-                for (let i = 1; i <= totalPages; i++) {
-                    const pageButton = document.createElement('button');
-                    pageButton.textContent = i;
-                    pageButton.classList.add('page-number');
-                    if (i === currentPage) {
-                        pageButton.classList.add('active');
-                    }
-                    pageButton.addEventListener('click', () => {
-                        const tempStartIndex = (i - 1) * videosPerPage;
-                        const tempEndIndex = tempStartIndex + videosPerPage;
-                        const tempVideosToDisplay = currentDisplayVideos.slice(tempStartIndex, tempEndIndex);
-
-                        if (tempVideosToDisplay.length === 0) {
-                            window.showModal("No videos available on this page yet.");
-                        } else {
-                            currentPage = i;
-                            renderVideos();
-                        }
-                    });
-                    pageNumbersContainer.appendChild(pageButton);
-                }
-            }
-        }
-
-        // Function to scroll to a specific video
-        function scrollToVideo(videoId) {
-            const videoElement = document.querySelector(`[data-video-id="${videoId}"]`);
-            if (videoElement) {
-                videoElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
-
-        // Function to render latest posts from video data (when search is empty)
-        function renderLatestPostsFromVideos() {
-            sidebarHeading.textContent = 'Latest Posts';
-            sidebarContentList.innerHTML = '';
-
-            const videoPosts = [];
-            document.querySelectorAll('.video-item').forEach(item => {
-                const titleElement = item.querySelector('.video-title');
-                const dateElement = item.querySelector('.video-date');
-                const videoId = item.dataset.videoId;
-                if (titleElement && dateElement && videoId) {
-                    const title = titleElement.textContent.trim();
-                    const dateString = dateElement.textContent.replace('Date: ', '').trim();
-                    const date = new Date(dateString);
-                    videoPosts.push({ date: date, title: title, videoId: videoId });
-                }
-            });
-
-            videoPosts.sort((a, b) => b.date - a.date);
-
-            if (videoPosts.length > 0) {
-                videoPosts.slice(0, 5).forEach(post => {
-                    const listItem = document.createElement('li');
-                    listItem.classList.add('sidebar-search-result');
-                    listItem.dataset.videoTargetId = post.videoId;
-                    const formattedDate = post.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-                    listItem.innerHTML = `On ${formattedDate} - ${post.title}`;
-                    sidebarContentList.appendChild(listItem);
-                });
-            } else {
-                const listItem = document.createElement('li');
-                listItem.classList.add('text-center', 'text-gray-500');
-                listItem.textContent = 'No latest posts from videos.';
-                sidebarContentList.appendChild(listItem);
-            }
-            attachSidebarResultListeners();
-        }
-
-        // Function to render filtered videos in sidebar (when search is active)
-        function renderFilteredVideosInSidebar(filteredVideos) {
-            sidebarHeading.textContent = 'Search Results';
-            sidebarContentList.innerHTML = '';
-
-            if (filteredVideos.length > 0) {
-                filteredVideos.forEach(item => {
-                    const titleElement = item.querySelector('.video-title');
-                    const videoId = item.dataset.videoId;
-                    if (titleElement && videoId) {
-                        const listItem = document.createElement('li');
-                        listItem.classList.add('sidebar-search-result');
-                        listItem.dataset.videoTargetId = videoId;
-                        listItem.textContent = titleElement.textContent.trim();
-                        sidebarContentList.appendChild(listItem);
-                    }
-                });
-            } else {
-                // No results found, but no explicit message displayed as per previous instruction
-            }
-            attachSidebarResultListeners();
-        }
-
-        // Function to attach click listeners to sidebar search results
-        function attachSidebarResultListeners() {
-            document.querySelectorAll('.sidebar-search-result').forEach(item => {
-                item.addEventListener('click', (event) => {
-                    const videoId = event.currentTarget.dataset.videoTargetId;
-                    if (videoId) {
-                        scrollToVideo(videoId);
-                    }
-                });
-            });
-        }
-
-        // Function to update scroll progress and button visibility
-        function updateScrollProgress() {
-            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const progress = (scrollHeight > 0) ? (scrollTop / scrollHeight) : 0;
-
-            const offset = circumference - (progress * circumference);
-            progressCircle.style.strokeDashoffset = offset;
-
-            if (scrollTop > 200) {
-                scrollToTopBtn.classList.add('visible');
-            } else {
-                scrollToTopBtn.classList.remove('visible');
-            }
-        }
-
-        // Function to search videos using LLM
-        async function searchVideosWithLLM(searchTerm) {
-            searchLoadingSpinner.classList.remove('hidden'); // Show loading spinner
-            sidebarContentList.innerHTML = ''; // Clear previous results
-
-            const videoDataForLLM = Array.from(allVideoItems).map(item => {
-                return {
-                    id: item.dataset.videoId,
-                    title: item.querySelector('.video-title')?.textContent || '',
-                    description: item.querySelector('.video-description')?.textContent || ''
-                };
-            });
-
-            const prompt = `Given the following video titles and descriptions, identify the video IDs that are most relevant to the search query: '${searchTerm}'. Provide the response as a JSON array of strings, where each string is a video ID. If no videos are relevant, return an empty array [].
-            
-            Video data: ${JSON.stringify(videoDataForLLM)}`;
-
-            let chatHistory = [];
-            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-
-            const payload = {
-                contents: chatHistory,
-                generationConfig: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: "ARRAY",
-                        items: { "type": "STRING" }
-                    }
-                }
-            };
-
-            const apiKey = ""; // Canvas will provide this at runtime
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
             try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const result = await response.json();
-
-                let relevantVideoIds = [];
-                if (result.candidates && result.candidates.length > 0 &&
-                    result.candidates[0].content && result.candidates[0].content.parts &&
-                    result.candidates[0].content.parts.length > 0) {
-                    const jsonString = result.candidates[0].content.parts[0].text;
-                    try {
-                        relevantVideoIds = JSON.parse(jsonString);
-                        if (!Array.isArray(relevantVideoIds)) {
-                            relevantVideoIds = []; // Ensure it's an array
-                        }
-                    } catch (parseError) {
-                        console.error("Error parsing LLM response JSON:", parseError);
-                        relevantVideoIds = [];
-                    }
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                // Sign in using custom token or anonymously
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
                 }
 
-                const filteredVideos = allVideoItems.filter(item =>
-                    relevantVideoIds.includes(item.dataset.videoId)
-                );
-
-                currentDisplayVideos = filteredVideos;
-                renderFilteredVideosInSidebar(filteredVideos);
-                renderVideos();
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        console.log("Firebase initialized and user signed in:", userId);
+                    } else {
+                        console.log("User is signed out.");
+                        userId = null;
+                    }
+                    isAuthReady = true;
+                });
 
             } catch (error) {
-                console.error("Error calling LLM for search:", error);
-                // Fallback to simple local search if LLM call fails
-                const fallbackFilteredVideos = allVideoItems.filter(item => {
-                    const title = item.querySelector('.video-title')?.textContent.toLowerCase() || '';
-                    const description = item.querySelector('.video-description')?.textContent.toLowerCase() || '';
-                    return title.includes(searchTerm) || description.includes(searchTerm);
-                });
-                currentDisplayVideos = fallbackFilteredVideos;
-                renderFilteredVideosInSidebar(fallbackFilteredVideos);
-                renderVideos();
-            } finally {
-                searchLoadingSpinner.classList.add('hidden'); // Hide loading spinner
+                console.error("Error during Firebase initialization or sign-in:", error);
             }
         }
 
+        // Start initialization on load
+        initFirebase();
 
-        // Ensure the page always loads in dark mode
-        document.addEventListener('DOMContentLoaded', async () => {
-            htmlElement.classList.add('dark');
-            htmlElement.classList.remove('light');
 
-            // Store all video items initially
-            allVideoItems = Array.from(document.querySelectorAll('.video-item'));
-            currentDisplayVideos = [...allVideoItems]; // Initialize with all videos
-            renderVideos(); // Render initial page
-            renderLatestPostsFromVideos(); // Call render function for latest posts initially
+        // --- APPLICATION LOGIC ---
+        
+        /**
+         * Toggles the mobile navigation menu.
+         */
+        window.toggleMenu = function() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('menu-icon');
+            
+            menu.classList.toggle('is-active');
 
-            // Initial call to set progress and visibility on load
-            updateScrollProgress();
-        });
-
-        // Add event listener for the new "Learn Bass" button
-        if (learnBassButton) {
-            learnBassButton.addEventListener('click', () => {
-                window.showModal("No videos have been made yet.");
-            });
-        }
-
-        // Toggle navigation for mobile
-        navToggle.addEventListener('click', function (event) {
-            navContent.classList.toggle('hidden');
-            event.stopPropagation();
-        });
-
-        // Disable right-click and show warning
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            window.showModal("You cannot right-click on this page! Ha Ha!");
-        });
-
-        // Close modal if clicked outside content
-        window.addEventListener('click', function(event) {
-            if (event.target == warningModal) {
-                window.closeModal();
-            }
-            if (!navContent.contains(event.target) && !navToggle.contains(event.target) && !navContent.classList.contains('hidden')) {
-                navContent.classList.add('hidden');
-            }
-        });
-
-        // Pagination event listeners
-        document.getElementById('prev-page').addEventListener('click', () => {
-            if (currentPage > 1) {
-                currentPage--;
-                renderVideos();
-            }
-        });
-
-        document.getElementById('next-page').addEventListener('click', () => {
-            const totalPages = Math.ceil(currentDisplayVideos.length / videosPerPage);
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderVideos();
-            }
-        });
-
-        // Video search functionality
-        videoSearchInput.addEventListener('keyup', function() {
-            const searchTerm = videoSearchInput.value.toLowerCase().trim();
-            currentPage = 1; // Reset to first page on new search
-
-            if (searchTerm === '') {
-                currentDisplayVideos = [...allVideoItems];
-                renderLatestPostsFromVideos();
-                renderVideos();
+            if (menu.classList.contains('is-active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
             } else {
-                searchVideosWithLLM(searchTerm);
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
             }
-        });
+        };
 
-        // Add scroll event listener for the scroll-to-top button
-        window.addEventListener('scroll', updateScrollProgress);
-
-        // Add click event listener for scrolling to top
-        scrollToTopBtn.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
     </script>
 </body>
-</html>
+
